@@ -1,0 +1,57 @@
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid name="invoiceLine-grid" title="Invoice Line"
+		model="com.axelor.axelor.gst.db.InvoiceLine">
+		<field name="product" />
+		<field name="HSBN" />
+		<field name="item" />
+		<field name="qty" />
+		<field name="price" />
+		<field name="netAmount" />
+		<field name="gstRate" />
+		<field name="IGST" />
+		<field name="CGST" />
+		<field name="SGST" />
+		<field name="grossAmount" />
+
+	</grid>
+	<form name="invoiceLine-form" title="Invoice Line"
+		model="com.axelor.axelor.gst.db.InvoiceLine" width="large"
+		onNew="action-invoiceLine-defaults">
+		<panel title="Invoice" css="panel-blue">
+			<field name="product" onChange="action-product-onchange" />
+			<field name="HSBN" />
+			<field name="item" />
+			<field name="qty" onChange="action-qty-onchange"/>
+			<field name="price" onChange="action-qty-onchange"/>
+			<field name="netAmount" />
+			<field name="gstRate" />
+			<field name="IGST" />
+			<field name="CGST" />
+			<field name="SGST" />
+			<field name="grossAmount" />
+		</panel>
+	</form>
+	<action-record name="action-product-onchange"
+		model="com.axelor.axelor.gst.db.InvoiceLine">
+		<field name="item" expr="eval:'['+product.code+']'+product.name"
+			if="product != null" />
+		<field name="gstRate" expr="eval: product.gstRate"
+			if="product != null" />
+		<field name="HSBN" expr="eval: product.HSBN"
+			if="product != null" />
+	</action-record>
+
+	<action-record name="action-invoiceLine-defaults"
+		model="com.axelor.axelor.gst.db.InvoiceLine">
+		<field name="price" expr="1" />
+	</action-record>
+	
+	
+	<action-method name="action-qty-onchange">
+	<call class="com.axelor.gst.web.Controller" method="calculate"/>	
+	</action-method>
+</object-views>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+	<menuitem name="party-root" title="Party"
+		icon-background="green" />
+
+	<menuitem name="party-root-contact" parent="party-root"
+		title="Contact" action="party-root-contact.view.party.contact" />
+
+	<menuitem name="party-root-party" parent="party-root"
+		title="Party" action="party.root.party.view.party" />
+
+	<menuitem name="party-root-configurations" parent="party-root"
+		title="Configurations" />
+
+	<menuitem name="party-root-configurations-address"
+		parent="party-root-configurations" title="Address"
+		action="party.root.configurations.view.party.address" />
+
+	<menuitem name="party-root-configurations-country"
+		parent="party-root-configurations" title="Country"
+		action="party.root.configurations.view.party.country" />
+
+	<menuitem name="party-root-configurations-state"
+		parent="party-root-configurations" title="State"
+		action="party.root.configurations.view.party.state" />
+
+	<menuitem name="party-root-configurations-city"
+		parent="party-root-configurations" title="City"
+		action="party.root.configurations.view.party.city" />
+
+	<action-view name="party-root-contact.view.party.contact"
+		title="Contact" model="com.axelor.axelor.gst.db.Contact">
+		<view type="grid" name="contact-grid" />
+		<view type="form" name="contact-form" />
+	</action-view>
+
+	<action-view
+		name="party.root.configurations.view.party.address" title="Address"
+		model="com.axelor.axelor.gst.db.Address">
+		<view type="grid" name="address-grid" />
+		<view type="form" name="address-form" />
+	</action-view>
+
+	<action-view
+		name="party.root.configurations.view.party.country" title="Country"
+		model="com.axelor.axelor.gst.db.Country">
+		<view type="grid" name="country-grid" />
+		<view type="form" name="country-form" />
+	</action-view>
+
+	<action-view
+		name="party.root.configurations.view.party.state" title="State"
+		model="com.axelor.axelor.gst.db.State">
+		<view type="grid" name="state-grid" />
+		<view type="form" name="state-form" />
+	</action-view>
+
+	<action-view
+		name="party.root.configurations.view.party.city" title="City"
+		model="com.axelor.axelor.gst.db.City">
+		<view type="grid" name="city-grid" />
+		<view type="form" name="city-form" />
+	</action-view>
+
+	<menuitem name="company-root" title="Company"
+		icon-background="blue" />
+
+	<menuitem name="company-root-company" parent="company-root"
+		title="Contact" action="company-root-company.view.company" />
+
+	<menuitem name="company-root-bank-account"
+		parent="company-root" title="Bank Account"
+		action="company-root-bank-account.view.company-bank-account" />
+
+	<action-view name="company-root-company.view.company"
+		title="Company" model="com.axelor.axelor.gst.db.Company">
+		<view type="grid" name="company-grid" />
+		<view type="form" name="company-form" />
+	</action-view>
+
+	<action-view
+		name="company-root-bank-account.view.company-bank-account"
+		title="Company" model="com.axelor.axelor.gst.db.BankAccount">
+		<view type="grid" name="bank-account-grid" />
+		<view type="form" name="bank-account-form" />
+	</action-view>
+
+	<action-view name="party.root.party.view.party"
+		title="Party" model="com.axelor.axelor.gst.db.Party">
+		<view type="grid" name="party-grid" />
+		<view type="form" name="party-form" />
+		<view type="cards" name="party-card" />
+	</action-view>
+
+	<menuitem name="product-root" title="Product"
+		icon-background="red" />
+
+	<menuitem name="product-root-product" parent="product-root"
+		title="Product" action="product-root-product.view.product" />
+
+	<menuitem name="product-root-product-category"
+		parent="product-root" title="Product Category"
+		action="product-root-product.view.product.category" />
+
+	<action-view name="product-root-product.view.product"
+		title="Product" model="com.axelor.axelor.gst.db.Product">
+		<view type="grid" name="product-grid" />
+		<view type="form" name="product-form" />
+		<view type="cards" name="product-card" />
+	</action-view>
+
+	<action-view
+		name="product-root-product.view.product.category" title="Product Category"
+		model="com.axelor.axelor.gst.db.ProductCategory">
+		<view type="grid" name="product-category-grid" />
+		<view type="form" name="product-category-form" />
+	</action-view>
+
+	<menuitem name="invoice-root" title="Invoice"
+		icon-background="blue" />
+
+	<menuitem name="invoice-root-all-invoice"
+		parent="invoice-root" title="All Invoice"
+		action="invoice-root-all-invoice.view.all.invoice" />
+		
+	<menuitem name="invoice-root-create-invoice"
+		parent="invoice-root" title="Create Invoice"
+		action="invoice-root-create-invoice.view.create-invoice" />
+		
+		<action-view
+		name="invoice-root-all-invoice.view.all.invoice" title="All Invoice"
+		model="com.axelor.axelor.gst.db.Invoice">
+		<view type="kanban" name="invoice-kanban" />
+		<view type="form" name="invoice-form" />
+		<view type="grid" name="invoice-grid" />
+
+	</action-view>
+		
+	<action-view
+		name="invoice-root-create-invoice.view.create-invoice" title="Create Invoice"
+		model="com.axelor.axelor.gst.db.Invoice">
+		<view type="form" name="invoice-form" />
+	</action-view>
+</object-views>

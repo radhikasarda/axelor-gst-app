@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid name="product-grid" title="Product"
+		model="com.axelor.axelor.gst.db.Product">
+		<field name="name" />
+		<field name="code" />
+		<field name="HSBN" />
+		<field name="category" />
+		<field name="salePrice" />
+		<field name="costPrice" />
+		<field name="gstRate" />
+	</grid>
+	<form name="product-form" title="Product"
+		model="com.axelor.axelor.gst.db.Product">
+		<panel title="Product" css="panel-green">
+			<panel colSpan="4">
+				<field name="image" showTitle="false" colSpan="12"
+					widget="image" />
+			</panel>
+			<panel colSpan="8">
+				<field name="name" />
+				<field name="code" />
+				<field name="HSBN" />
+				<field name="category" />
+				<field name="salePrice" />
+				<field name="costPrice" />
+				<field name="gstRate" />
+			</panel>
+		</panel>
+	</form>
+
+	<cards name="product-card" title="Product"
+		model="com.axelor.axelor.gst.db.Product" orderBy="name">
+		<field name="name" />
+		<field name="code" />
+		<field name="HSBN" />
+		<field name="category" />
+		<field name="salePrice" />
+		<field name="costPrice" />
+		<field name="gstRate" />
+		<field name="image" />
+		<template><![CDATA[
+		<div class="span4 card-image">
+        <img ng-if="image" ng-src="{{$image(null, 'image')}}">
+        <img ng-if="!image" src="img/user.png">  
+      </div>
+      <div class="span8">
+      <strong>Name</strong>
+      <br>{{name}}
+      <br>Code:{{code}}
+      <br>HSBN:{{HSBN}}
+      <br>Category:{{category.name}}
+      <br>Sale Price:{{salePrice}}
+      <br>Cost Price:{{costPrice}}
+      <br>GST Rate:{{gstRate}}
+      </div>
+    ]]></template>
+	</cards>
+
+</object-views>

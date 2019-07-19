@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid name="party-grid" title="Party"
+		model="com.axelor.axelor.gst.db.Party">
+		<field name="reference" />
+		<field name="name" />
+		<field name="type"/>
+		<field name="customer" />
+		<field name="supplier" />
+		<field name="GSTIN" />
+	</grid>
+	<form name="party-form" title="Party"
+		model="com.axelor.axelor.gst.db.Party" onNew="action-party-defaults">
+		<panel title="Party" css="panel-green">
+			<field name="reference" />
+			<field name="name" />
+			<field name="type" selection="party-type-selection"/>
+			<field name="customer" />
+			<field name="supplier" />
+			<panel colSpan="12">
+				<field name="contactList" colSpan="12">
+					<editor>
+						<field name="name" />
+						<field name="type" selection="contact.type.selection" />
+						<field name="primaryEmail" />
+						<field name="secondaryEmail" />
+						<field name="primaryPhone" />
+						<field name="secondaryPhone" />
+					</editor>
+				</field>
+			</panel>
+			<panel colSpan="12">
+				<field name="addressList" colSpan="12">
+					<editor>
+						<field name="type" selection="address.type.selection" />
+						<field name="line1" />
+						<field name="line2" />
+						<field name="city" />
+						<field name="state" />
+						<field name="country" />
+						<field name="pincode" />
+					</editor>
+				</field>
+			</panel>
+
+		</panel>
+	</form>
+
+	<cards name="party-card" title="Party"
+		model="com.axelor.axelor.gst.db.Party" orderBy="name">
+		<field name="reference" />
+		<field name="name" />
+		<field name="type" />
+		<field name="GSTIN" />
+		<field name="address" />
+		<field name="contact"/>	
+			<template><![CDATA[
+      <div class="span12">
+      <strong>Name</strong>
+      <br>{{name}}
+      <br>Type:{{type}}
+      <br>GSTIN:{{GSTIN}}
+      
+        <address>
+        <strong>Address</strong>
+          <br>City:{{address.city}}
+        </address> 
+      </div>
+    ]]></template>
+	</cards>
+	<selection name="party-type-selection">
+	<option value="individual">Individual</option>
+	<option value="company">Company</option>
+	</selection>
+	<action-record name="action-party-defaults" model="com.axelor.axelor.gst.db.Party">
+	<field name="type" expr="company"/>
+	</action-record>
+</object-views>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
+  http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid name="invoice-grid" title="Invoice"
+		model="com.axelor.axelor.gst.db.Invoice">
+		<field name="status" />
+		<field name="company" />
+		<field name="reference" />
+		<field name="invoiceDate" />
+		<field name="priority" />
+		<field name="party" />
+		<field name="partyContact" />
+		<field name="invoiceAddress" />
+		<field name="shippingAddress" />
+		<field name="useInvoiceAddress" />
+		<field name="netAmount" />
+		<field name="netIGST" />
+		<field name="netCGST" />
+		<field name="netSGST" />
+		<field name="grossAmount" />
+		<field name="invoiceItemsList" />
+
+	</grid>
+	<form name="invoice-form" title="Invoice"
+		model="com.axelor.axelor.gst.db.Invoice" width="large"
+		onNew="action-invoice-defaults">
+		<panel title="Invoice" css="panel-blue">
+			<panel colSpan="12">
+				<field name="status" widget="NavSelect"
+					selection="invoice-status-selection" />
+
+			</panel>
+			
+			<field name="company" />
+			<field name="reference" />
+			<field name="invoiceDate" />
+			<field name="priority" />
+			<field name="party" />
+			<field name="partyContact" />
+			<field name="invoiceAddress" />
+			<field name="shippingAddress"
+				hideIf="useInvoiceAddress == true" />
+			<field name="useInvoiceAddress" />
+			<field name="netAmount" />
+			<field name="netIGST" />
+			<field name="netCGST" />
+			<field name="netSGST" />
+			<field name="grossAmount" />
+			<field name="invoiceItemsList"
+				onChange="action-invoice-net-calculation" />
+		</panel>
+		<panel><button name="btnValidate" title="Validate" onClick="action-button-validate-on-click"/>
+				<button name="btnCancel" title="Cancel" onClick="action-button-cancel-on-click"/></panel>
+	</form>
+
+	<kanban name="invoice-kanban" title="All Invoice"
+		model="com.axelor.axelor.gst.db.Invoice" columnBy="status"
+		sequenceBy="priority" limit="10">
+		<field name="company" />
+		<field name="netAmount" />
+		<field name="grossAmount" />
+		<template><![CDATA[
+ 		<h4>{{company.name}}</h4>
+		<div class="card-body">Gross Amount:{{grossAmount}}</div>
+		<div class="card-body">Net Amount:{{netAmount}}</div>
+    ]]></template>
+	</kanban>
+
+
+
+	<selection name="invoice-status-selection">
+		<option value="draft">Draft</option>
+		<option value="validated">Validated</option>
+		<option value="paid">Paid</option>
+		<option value="cancelled">Cancelled</option>
+	</selection>
+
+	<action-record name="action-invoice-defaults"
+		model="com.axelor.axelor.gst.db.Invoice">
+		<field name="status" expr="draft" />
+		<field name="company" expr="company" />
+		<field name="invoiceDate" expr="eval: __datetime__ " />
+		<field name="useInvoiceAddress" expr="true" />
+	</action-record>
+
+	<action-method name="action-invoice-net-calculation">
+		<call class="com.axelor.gst.web.Controller"
+			method="calculateInvoice" />
+	</action-method>
+	
+	<action-attrs name="action-button-validate-on-click">
+	<attribute name="title" for="btnValidate" expr="Paid"/>
+	<attribute name="value" for="status" expr="validated" if="status='draft'"/>
+	<attribute name="value" for="status" expr="paid" if="status='validated'"/>
+
+	</action-attrs>
+	<action-attrs name="action-button-cancel-on-click">
+	
+	<attribute name="value" for="status" expr="cancelled" />
+
+	</action-attrs>
+
+</object-views>
