@@ -8,6 +8,7 @@ public interface Service {
 	
 	public InvoiceLine calculate(InvoiceLine invoiceline, Address invoiceAddress, Address companyAddress);
 	public Invoice calculateInvoice(Invoice invoice);
+	public Invoice fetchInvoiceData(Invoice invoice);
 	
 
 }

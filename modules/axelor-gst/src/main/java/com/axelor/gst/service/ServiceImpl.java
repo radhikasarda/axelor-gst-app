@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.axelor.axelor.gst.db.Address;
+import com.axelor.axelor.gst.db.Contact;
 import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
 
@@ -28,7 +29,7 @@ public class ServiceImpl implements Service {
 			invoiceLine.setCGST(sgst);
 		}
 
-		grossAmount = netAmount.add(igst).add(cgst).add(sgst);
+		grossAmount = netAmount.add(igst).add(sgst).add(cgst);
 		invoiceLine.setGrossAmount(grossAmount);
 		invoiceLine.setNetAmount(netAmount);
 		return invoiceLine;
@@ -56,6 +57,30 @@ public class ServiceImpl implements Service {
 		invoice.setNetCGST(invoicecgst);
 		invoice.setNetAmount(invoiceNetAmount);
 		invoice.setGrossAmount(invoicegrossAmount);
+		return invoice;
+
+	}
+
+	@Override
+	public Invoice fetchInvoiceData(Invoice invoice) {
+
+		for (Contact partyContactList : invoice.getParty().getContactList()) {
+			if (partyContactList.getType().contains("primary")) {
+				invoice.setPartyContact(partyContactList);
+			}
+		}
+		for (Address addressList : invoice.getParty().getAddressList()) {
+
+			if (addressList.getType().contains("invoice")) {
+				invoice.setInvoiceAddress(addressList);
+			} else if (addressList.getType().contains("shipping")) {
+				invoice.setShippingAddress(addressList);
+			} 
+		}
+	
+		if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
+			invoice.setShippingAddress(invoice.getInvoiceAddress());
+		} 
 		return invoice;
 
 	}

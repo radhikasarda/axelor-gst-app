@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object-views xmlns="http://axelor.com/xml/ns/object-views"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
   http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
 
-	<grid name="invoice-grid" title="Invoice"
-		model="com.axelor.axelor.gst.db.Invoice">
+	<grid name="invoice-grid" title="Invoice" model="com.axelor.axelor.gst.db.Invoice">
 		<field name="status" />
 		<field name="company" />
 		<field name="reference" />
@@ -24,41 +22,36 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice"
-		model="com.axelor.axelor.gst.db.Invoice" width="large"
-		onNew="action-invoice-defaults">
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults">
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
-				<field name="status" widget="NavSelect"
-					selection="invoice-status-selection" />
+				<field name="status" widget="NavSelect" selection="invoice-status-selection" />
 
 			</panel>
-			
+
 			<field name="company" />
 			<field name="reference" />
 			<field name="invoiceDate" />
 			<field name="priority" />
-			<field name="party" />
+			<field name="party" onChange="action-invoice-method-onChange-party" />
 			<field name="partyContact" />
 			<field name="invoiceAddress" />
-			<field name="shippingAddress"
-				hideIf="useInvoiceAddress == true" />
-			<field name="useInvoiceAddress" />
+			<field name="shippingAddress" />
+			<field name="useInvoiceAddress"  onChange="action-invoice-method-onChange-party" />
 			<field name="netAmount" />
 			<field name="netIGST" />
 			<field name="netCGST" />
 			<field name="netSGST" />
 			<field name="grossAmount" />
-			<field name="invoiceItemsList"
-				onChange="action-invoice-net-calculation" />
+			<field name="invoiceItemsList" onChange="action-invoice-net-calculation" />
 		</panel>
-		<panel><button name="btnValidate" title="Validate" onClick="action-button-validate-on-click"/>
-				<button name="btnCancel" title="Cancel" onClick="action-button-cancel-on-click"/></panel>
+		<panel sidebar="true">
+			<button name="btnValidate" title="Validate" onClick="action-button-validate-on-click" />
+			<button name="btnCancel" title="Cancel" onClick="action-button-cancel-on-click" />
+		</panel>
 	</form>
 
-	<kanban name="invoice-kanban" title="All Invoice"
-		model="com.axelor.axelor.gst.db.Invoice" columnBy="status"
-		sequenceBy="priority" limit="10">
+	<kanban name="invoice-kanban" title="All Invoice" model="com.axelor.axelor.gst.db.Invoice" columnBy="status" sequenceBy="priority" limit="10">
 		<field name="company" />
 		<field name="netAmount" />
 		<field name="grossAmount" />
@@ -78,29 +71,28 @@
 		<option value="cancelled">Cancelled</option>
 	</selection>
 
-	<action-record name="action-invoice-defaults"
-		model="com.axelor.axelor.gst.db.Invoice">
-		<field name="status" expr="draft" />
-		<field name="company" expr="company" />
+	<action-record name="action-invoice-method-set-defaults" model="com.axelor.axelor.gst.db.Invoice">
+		<field name="company" expr="eval:__repo__(Company).all().fetchOne()" />
 		<field name="invoiceDate" expr="eval: __datetime__ " />
 		<field name="useInvoiceAddress" expr="true" />
 	</action-record>
 
 	<action-method name="action-invoice-net-calculation">
-		<call class="com.axelor.gst.web.Controller"
-			method="calculateInvoice" />
+		<call class="com.axelor.gst.web.Controller" method="calculateInvoice" />
 	</action-method>
-	
+
 	<action-attrs name="action-button-validate-on-click">
-	<attribute name="title" for="btnValidate" expr="Paid"/>
-	<attribute name="value" for="status" expr="validated" if="status='draft'"/>
-	<attribute name="value" for="status" expr="paid" if="status='validated'"/>
-
+		<attribute name="title" for="btnValidate" expr="Paid" />
+		<attribute name="value" for="status" expr="validated" if="status=='draft'" />
+		<attribute name="value" for="status" expr="paid" if="status=='validated'" />
 	</action-attrs>
+
 	<action-attrs name="action-button-cancel-on-click">
-	
-	<attribute name="value" for="status" expr="cancelled" />
-
+		<attribute name="value" for="status" expr="cancelled" />
 	</action-attrs>
+	
+	<action-method name="action-invoice-method-onChange-party">
+	<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData"/>
+	</action-method>
 
 </object-views>

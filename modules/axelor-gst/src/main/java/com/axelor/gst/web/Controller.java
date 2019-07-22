@@ -37,9 +37,16 @@ public class Controller {
 		response.setValue("netIGST", invoice.getNetIGST());
 		response.setValue("netSGST", invoice.getNetSGST());
 		response.setValue("netCGST", invoice.getNetCGST());
-		response.setValue("grossAmount",invoice.getGrossAmount());
+		response.setValue("grossAmount",invoice.getGrossAmount());	
+	
+	}
+
+	public void fetchInvoiceData(ActionRequest request, ActionResponse response) {
 		
-		
-		
+		Invoice invoice=request.getContext().asType(Invoice.class);
+		invoice=service.fetchInvoiceData(invoice);
+		response.setValue("partyContact", invoice.getPartyContact());
+		response.setValue("invoiceAddress",invoice.getInvoiceAddress());
+		response.setValue("shippingAddress", invoice.getShippingAddress());
 	}
 }

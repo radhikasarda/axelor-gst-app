@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<domain-models
-	xmlns="http://axelor.com/xml/ns/domain-models"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
   http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
 
-	<module name="axelor-gst" package="com.axelor.axelor.gst.db" />
+		<module name="axelor-gst" package="com.axelor.axelor.gst.db" />
 
-	<entity name="Address">
-		<string name="type" title="Type" required="true" />
-		<string name="line1" title="Line 1" required="true" />
-		<string name="line2" title="Line 2" />
-		<many-to-one name="city" title="City"
-			ref="com.axelor.axelor.gst.db.City" required="true" />
-		<many-to-one name="state" title="State"
-			ref="com.axelor.axelor.gst.db.State" />
-		<many-to-one name="country" title="Country"
-			ref="com.axelor.axelor.gst.db.Country" required="true" />
-		<string name="pincode" title="Pincode" />
-		<many-to-one name="party"
-			ref="com.axelor.axelor.gst.db.Party" />
-	</entity>
+		<entity name="Address">
+				<string name="type" title="Type" required="true" />
+				<string name="line1" title="Line 1" required="true" />
+				<string name="line2" title="Line 2" />
+				<string name="fullAddress" namecolumn="true">
+				 <![CDATA[
+    if (line2 == null ) {
+        return "Type:" + type + " " + "Line 1:" + line1 + " " + "City:" + city.getName() + " " + "State:" + state.getName();
+    }
+    return "Type:" + type + " " + "Line 1:" + line1 + "Line 2:" + line2 + " " + "City:" + city.getName() + " " + "State:" + state.getName();
+    ]]>
+				
+				</string>
+				<many-to-one name="city" title="City" ref="com.axelor.axelor.gst.db.City" required="true" />
+				<many-to-one name="state" title="State" ref="com.axelor.axelor.gst.db.State" />
+				<many-to-one name="country" title="Country" ref="com.axelor.axelor.gst.db.Country" required="true" />
+				<string name="pincode" title="Pincode" />
+				<many-to-one name="party" ref="com.axelor.axelor.gst.db.Party" />
+		</entity>
 
 </domain-models>

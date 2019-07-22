@@ -69,7 +69,7 @@
 		icon-background="blue" />
 
 	<menuitem name="company-root-company" parent="company-root"
-		title="Contact" action="company-root-company.view.company" />
+		title="Company" action="company-root-company.view.company" />
 
 	<menuitem name="company-root-bank-account"
 		parent="company-root" title="Bank Account"

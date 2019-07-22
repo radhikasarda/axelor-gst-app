@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<domain-models
-	xmlns="http://axelor.com/xml/ns/domain-models"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://axelor.com/xml/ns/domain-models
   http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
 
-	<module name="axelor-gst" package="com.axelor.axelor.gst.db" />
+		<module name="axelor-gst" package="com.axelor.axelor.gst.db" />
 
-	<entity name="Sequence" cachable="true">
-	<string name="prefix" required="true"/>
-	<string name="suffix"/>
-	<integer name="padding" min="1" max="10"/>
-	<string name="nextNumber"/>
-	<many-to-one name="model" ref="com.axelor.meta.db.MetaModel" title="Model" required="true"/>
-	</entity>
-	</domain-models>
+		<entity name="Sequence" cachable="true">
+				<string name="prefix" required="true" />
+				<string name="suffix" />
+				<integer name="padding" min="1" max="10" />
+				<string name="nextNumber" />
+				<many-to-one name="model" ref="com.axelor.meta.db.MetaModel" title="Model" required="true" />
+		</entity>
+</domain-models>
 	
