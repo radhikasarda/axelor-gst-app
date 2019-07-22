@@ -22,7 +22,7 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults">
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults" onLoad="action-change-status-of-invoice">
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
 				<field name="status" widget="NavSelect" selection="invoice-status-selection" />
@@ -37,16 +37,19 @@
 			<field name="partyContact" />
 			<field name="invoiceAddress" />
 			<field name="shippingAddress" />
-			<field name="useInvoiceAddress"  onChange="action-invoice-method-onChange-party" />
+			<field name="useInvoiceAddress" onChange="action-invoice-method-onChange-party" />
+		</panel>
+
+		<panel-related field="invoiceItemsList" onChange="action-invoice-net-calculation"></panel-related>
+		<panel>
 			<field name="netAmount" />
 			<field name="netIGST" />
 			<field name="netCGST" />
 			<field name="netSGST" />
 			<field name="grossAmount" />
-			<field name="invoiceItemsList" onChange="action-invoice-net-calculation" />
 		</panel>
 		<panel sidebar="true">
-			<button name="btnValidate" title="Validate" onClick="action-button-validate-on-click" />
+			<button name="btnValidate" title="Validate" onClick="action-change-status-of-invoice" />
 			<button name="btnCancel" title="Cancel" onClick="action-button-cancel-on-click" />
 		</panel>
 	</form>
@@ -81,18 +84,20 @@
 		<call class="com.axelor.gst.web.Controller" method="calculateInvoice" />
 	</action-method>
 
-	<action-attrs name="action-button-validate-on-click">
+	<action-attrs name="action-change-status-of-invoice">
 		<attribute name="title" for="btnValidate" expr="Paid" />
 		<attribute name="value" for="status" expr="validated" if="status=='draft'" />
 		<attribute name="value" for="status" expr="paid" if="status=='validated'" />
+		<attribute name="hidden" for="btnValidate" expr="true" if="status=='paid'" />
+		
 	</action-attrs>
 
 	<action-attrs name="action-button-cancel-on-click">
 		<attribute name="value" for="status" expr="cancelled" />
 	</action-attrs>
-	
+
 	<action-method name="action-invoice-method-onChange-party">
-	<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData"/>
+		<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData" />
 	</action-method>
 
 </object-views>

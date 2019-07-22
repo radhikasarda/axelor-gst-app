@@ -23,14 +23,15 @@ public class ServiceImpl implements Service {
 		if (!invoiceAddress.getState().getName().equals(companyAddress.getState().getName())) {
 			igst = netAmount.multiply(invoiceLine.getGstRate());
 			invoiceLine.setIGST(igst);
+			invoiceLine.setGrossAmount(netAmount.add(igst));
 		} else {
 			sgst = netAmount.multiply(invoiceLine.getGstRate()).divide(new BigDecimal(200));
 			invoiceLine.setSGST(sgst);
+			
 			invoiceLine.setCGST(sgst);
+			invoiceLine.setGrossAmount(netAmount.add(sgst).add(sgst));
 		}
 
-		grossAmount = netAmount.add(igst).add(sgst).add(cgst);
-		invoiceLine.setGrossAmount(grossAmount);
 		invoiceLine.setNetAmount(netAmount);
 		return invoiceLine;
 	}
