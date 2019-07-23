@@ -12,7 +12,6 @@ public interface Service {
 	public Invoice calculateInvoice(Invoice invoice);
 	public Invoice fetchInvoiceData(Invoice invoice);
 	public Sequence generateNextNumber(Sequence sequence);
-	public Party generateReference(Party party );
 	
 
 }

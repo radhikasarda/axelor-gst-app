@@ -107,14 +107,6 @@ public class ServiceImpl implements Service {
 		
 		return sequence;
 		}
-
-	@Override
-	public Party generateReference(Party party) {
-	
-			
-		return null;
-	}
-	
-	}
+}
 
 

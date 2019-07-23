@@ -22,7 +22,7 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults" onLoad="action-change-status-of-invoice">
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults" onLoad="action-change-status-of-invoice" onSave="action-invoice-method-on-save-generate-reference">
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
 				<field name="status" widget="NavSelect" selection="invoice-status-selection" />
@@ -98,6 +98,10 @@
 
 	<action-method name="action-invoice-method-onChange-party">
 		<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData" />
+	</action-method>
+	
+	<action-method name="action-invoice-method-on-save-generate-reference">
+	<call class="com.axelor.gst.web.Controller" method="getReferenceInvoice" />
 	</action-method>
 
 </object-views>

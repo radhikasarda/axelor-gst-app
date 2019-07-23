@@ -67,9 +67,11 @@ public class Controller {
 	}
 	
 	@Transactional
-	public void generateReference(ActionRequest request, ActionResponse response) {
+	public void generateReferenceParty(ActionRequest request, ActionResponse response) {
 		
 		Party party=request.getContext().asType(Party.class);
+		
+		if(party.getReference()==null) {
 		MetaModel model = Beans.get(MetaModelRepository.class).findByName("Party");	
 		Sequence sequence=sequenceRepository.all().filter("self.model = "+model.getId()).fetchOne();
 		if(sequence==null) {
@@ -95,6 +97,48 @@ public class Controller {
 		sequence.setNextNumber(nextNum);	
 		sequenceRepository.save(sequence);
 		response.setValue("reference", party.getReference());
+		}
+	}
+	@Transactional
+	public void getReferenceInvoice(ActionRequest request, ActionResponse response) {
+		
+		Invoice invoice=request.getContext().asType(Invoice.class);
+		if(invoice.getReference()==null ) {
+			MetaModel model = Beans.get(MetaModelRepository.class).findByName("Invoice");	
+			Sequence sequence=sequenceRepository.all().filter("self.model = "+model.getId()).fetchOne();
+			if(sequence==null) {
+				System.err.println("No sequence specified");
+			}
+			String refNumber=sequence.getNextNumber();
+			invoice.setReference(refNumber);
+			String prefix=sequence.getPrefix();
+			String suffix=sequence.getSuffix();
+			Long newNum=Long.parseLong(refNumber.substring(sequence.getPrefix().length(),prefix.length()+sequence.getPadding()));
+			newNum++;
+			String newStringNumber=newNum.toString();
+			
+			for (int i = 0; i <( sequence.getPadding() - newStringNumber.length()); i++) {
+					prefix=prefix.concat("0");
+			}
+			System.out.println(newStringNumber);
+			String nextNum=prefix+newStringNumber;
+			if(suffix!=null) { 
+			nextNum=nextNum+suffix;
+			}
+			System.out.println(nextNum);
+			sequence.setNextNumber(nextNum);	
+			sequenceRepository.save(sequence);
+			response.setValue("reference", invoice.getReference());
+			}
+			
+			
+			
+			
+		}
+		
+		
+		
 		
 	}
-}
+	
+
