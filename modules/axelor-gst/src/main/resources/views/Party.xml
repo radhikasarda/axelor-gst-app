@@ -14,7 +14,7 @@
 		<field name="GSTIN" />
 	</grid>
 	<form name="party-form" title="Party"
-		model="com.axelor.axelor.gst.db.Party" onNew="action-party-defaults">
+		model="com.axelor.axelor.gst.db.Party" onNew="action-party-defaults" onSave="action-party-method-on-save">
 		<panel title="Party" css="panel-green">
 			<field name="reference" />
 			<field name="name" />
@@ -79,4 +79,8 @@
 	<action-record name="action-party-defaults" model="com.axelor.axelor.gst.db.Party">
 	<field name="type" expr="company"/>
 	</action-record>
+	
+	<action-method name="action-party-method-on-save">
+	<call class="com.axelor.gst.web.Controller" method="generateReference" />
+	</action-method>
 </object-views>

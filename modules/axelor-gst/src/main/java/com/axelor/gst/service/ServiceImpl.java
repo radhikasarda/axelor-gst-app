@@ -7,6 +7,8 @@ import com.axelor.axelor.gst.db.Address;
 import com.axelor.axelor.gst.db.Contact;
 import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
+import com.axelor.axelor.gst.db.Party;
+import com.axelor.axelor.gst.db.Sequence;
 
 public class ServiceImpl implements Service {
 
@@ -27,7 +29,7 @@ public class ServiceImpl implements Service {
 		} else {
 			sgst = netAmount.multiply(invoiceLine.getGstRate()).divide(new BigDecimal(200));
 			invoiceLine.setSGST(sgst);
-			
+
 			invoiceLine.setCGST(sgst);
 			invoiceLine.setGrossAmount(netAmount.add(sgst).add(sgst));
 		}
@@ -76,14 +78,43 @@ public class ServiceImpl implements Service {
 				invoice.setInvoiceAddress(addressList);
 			} else if (addressList.getType().contains("shipping")) {
 				invoice.setShippingAddress(addressList);
-			} 
+			}
 		}
-	
+
 		if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
 			invoice.setShippingAddress(invoice.getInvoiceAddress());
-		} 
+		}
 		return invoice;
 
 	}
 
-}
+	@Override
+	public Sequence generateNextNumber(Sequence sequence) {
+		String prefix = sequence.getPrefix();
+		String suffix = sequence.getSuffix();
+		int padding = sequence.getPadding();
+		String nextNumber = prefix;
+		if(sequence.getNextNumber()==null) {
+
+		for (int i = 0; i < padding; i++) {
+			nextNumber = nextNumber.concat("0");
+		}
+		if(suffix!=null) { 
+			nextNumber=nextNumber.concat(suffix); 
+		}
+		sequence.setNextNumber(nextNumber);
+		}
+		
+		return sequence;
+		}
+
+	@Override
+	public Party generateReference(Party party) {
+	
+			
+		return null;
+	}
+	
+	}
+
+

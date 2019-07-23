@@ -6,6 +6,10 @@
 
 	<grid name="product-grid" title="Product"
 		model="com.axelor.axelor.gst.db.Product">
+		<toolbar>
+			<button name="reportBtn" title="Print"
+				onClick="action-product-method-generate-report" icon="fa-print" />
+		</toolbar>
 		<field name="name" />
 		<field name="code" />
 		<field name="HSBN" />

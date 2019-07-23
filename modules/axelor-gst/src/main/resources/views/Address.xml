@@ -13,6 +13,7 @@
 		<field name="state" />
 		<field name="country" />
 		<field name="pincode" />
+		
 
 	</grid>
 	<form name="address-form" title="Address"
@@ -25,6 +26,7 @@
 		<field name="state" />
 		<field name="country" />
 		<field name="pincode" />
+	
 		</panel>
 	</form>
 	<selection name="address.type.selection">

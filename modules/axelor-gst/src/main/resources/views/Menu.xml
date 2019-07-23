@@ -50,6 +50,8 @@
 	<menuitem name="company-root-company" parent="company-root" title="Company" action="company-root-company.view.company" />
 
 	<menuitem name="company-root-bank-account" parent="company-root" title="Bank Account" action="company-root-bank-account.view.company-bank-account" />
+	
+	<menuitem name="company-root-sequence" parent="company-root" title="Sequence" action="company-root-sequence.view.sequence" />
 
 	<action-view name="company-root-company.view.company" title="Company" model="com.axelor.axelor.gst.db.Company">
 		<view type="grid" name="company-grid" />
@@ -61,6 +63,11 @@
 		<view type="form" name="bank-account-form" />
 	</action-view>
 
+	<action-view name="company-root-sequence.view.sequence" title="Sequence" model="com.axelor.axelor.gst.db.Sequence">
+		<view type="grid" name="sequence-grid" />
+		<view type="form" name="sequence-form" />
+	</action-view>
+	
 	<action-view name="party.root.party.view.party" title="Party" model="com.axelor.axelor.gst.db.Party">
 		<view type="grid" name="party-grid" />
 		<view type="form" name="party-form" />

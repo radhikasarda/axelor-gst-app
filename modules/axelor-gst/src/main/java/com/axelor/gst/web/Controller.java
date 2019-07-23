@@ -5,14 +5,23 @@ import javax.inject.Inject;
 import com.axelor.axelor.gst.db.Address;
 import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
+import com.axelor.axelor.gst.db.Party;
+import com.axelor.axelor.gst.db.Sequence;
+import com.axelor.axelor.gst.db.repo.SequenceRepository;
+import com.axelor.db.Query;
 import com.axelor.gst.service.Service;
+import com.axelor.inject.Beans;
+import com.axelor.meta.db.MetaModel;
+import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
+import com.google.inject.persist.Transactional;
 
 public class Controller {
 
 	
 	@Inject Service service;
+	@Inject SequenceRepository sequenceRepository;
 	
 	public void calculate(ActionRequest request, ActionResponse response) {
 
@@ -48,5 +57,44 @@ public class Controller {
 		response.setValue("partyContact", invoice.getPartyContact());
 		response.setValue("invoiceAddress",invoice.getInvoiceAddress());
 		response.setValue("shippingAddress", invoice.getShippingAddress());
+	}
+	
+	public void generateNextNumber(ActionRequest request, ActionResponse response) {
+		
+		Sequence sequence=request.getContext().asType(Sequence.class);
+		sequence=service.generateNextNumber(sequence);
+		response.setValue("nextNumber",sequence.getNextNumber());
+	}
+	
+	@Transactional
+	public void generateReference(ActionRequest request, ActionResponse response) {
+		
+		Party party=request.getContext().asType(Party.class);
+		MetaModel model = Beans.get(MetaModelRepository.class).findByName("Party");	
+		Sequence sequence=sequenceRepository.all().filter("self.model = "+model.getId()).fetchOne();
+		if(sequence==null) {
+			System.err.println("No sequence specified");
+		}
+		String refNumber=sequence.getNextNumber();
+		party.setReference(refNumber);
+		String prefix=sequence.getPrefix();
+		String suffix=sequence.getSuffix();
+		Long newNum=Long.parseLong(refNumber.substring(sequence.getPrefix().length(),prefix.length()+sequence.getPadding()));
+		newNum++;
+		String newStringNumber=newNum.toString();
+		
+		for (int i = 0; i <( sequence.getPadding() - newStringNumber.length()); i++) {
+				prefix=prefix.concat("0");
+		}
+		System.out.println(newStringNumber);
+		String nextNum=prefix+newStringNumber;
+		if(suffix!=null) { 
+		nextNum=nextNum+suffix;
+		}
+		System.out.println(nextNum);
+		sequence.setNextNumber(nextNum);	
+		sequenceRepository.save(sequence);
+		response.setValue("reference", party.getReference());
+		
 	}
 }
