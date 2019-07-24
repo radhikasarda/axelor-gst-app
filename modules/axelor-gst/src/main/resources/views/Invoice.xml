@@ -22,7 +22,8 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults" onLoad="action-change-status-of-invoice" onSave="action-invoice-method-on-save-generate-reference">
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults"
+		onSave="action-invoice-method-on-save-generate-reference">
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
 				<field name="status" widget="NavSelect" selection="invoice-status-selection" />
@@ -49,8 +50,9 @@
 			<field name="grossAmount" />
 		</panel>
 		<panel sidebar="true">
-			<button name="btnValidate" title="Validate" onClick="action-change-status-of-invoice" />
-			<button name="btnCancel" title="Cancel" onClick="action-button-cancel-on-click" />
+			<button name="btnValidate" title="Validate" onClick="action-invoice-method-buttonValidate-on-click" />
+			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-buttonCancel-on-click" />
+			<button name="btnPaid" title="Paid" onClick="action-invoice-method-buttonPaid-on-click" />
 		</panel>
 	</form>
 
@@ -84,24 +86,28 @@
 		<call class="com.axelor.gst.web.Controller" method="calculateInvoice" />
 	</action-method>
 
-	<action-attrs name="action-change-status-of-invoice">
-		<attribute name="title" for="btnValidate" expr="Paid" />
-		<attribute name="value" for="status" expr="validated" if="status=='draft'" />
-		<attribute name="value" for="status" expr="paid" if="status=='validated'" />
-		<attribute name="hidden" for="btnValidate" expr="true" if="status=='paid'" />
-		
+	<action-attrs name="action-invoice-method-buttonValidate-on-click">
+		<attribute name="value" for="status" expr="validated" />
+		<attribute name="hidden" for="btnValidate" expr="true" />
 	</action-attrs>
 
-	<action-attrs name="action-button-cancel-on-click">
+	<action-attrs name="action-invoice-method-buttonCancel-on-click">
 		<attribute name="value" for="status" expr="cancelled" />
+		<attribute name="hidden" for="btnValidate" expr="true" />
+		<attribute name="hidden" for="btnCancel" expr="true" />
+	</action-attrs>
+
+	<action-attrs name="action-invoice-method-buttonPaid-on-click">
+		<attribute name="value" for="status" expr="paid" />
+		<attribute name="hidden" for="btnPaid" expr="true" />
 	</action-attrs>
 
 	<action-method name="action-invoice-method-onChange-party">
 		<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData" />
 	</action-method>
-	
+
 	<action-method name="action-invoice-method-on-save-generate-reference">
-	<call class="com.axelor.gst.web.Controller" method="getReferenceInvoice" />
+		<call class="com.axelor.gst.web.Controller" method="getReferenceInvoice" />
 	</action-method>
 
 </object-views>

@@ -93,7 +93,6 @@ public class Controller {
 		if(suffix!=null) { 
 		nextNum=nextNum+suffix;
 		}
-		System.out.println(nextNum);
 		sequence.setNextNumber(nextNum);	
 		sequenceRepository.save(sequence);
 		response.setValue("reference", party.getReference());
@@ -125,20 +124,11 @@ public class Controller {
 			if(suffix!=null) { 
 			nextNum=nextNum+suffix;
 			}
-			System.out.println(nextNum);
 			sequence.setNextNumber(nextNum);	
 			sequenceRepository.save(sequence);
 			response.setValue("reference", invoice.getReference());
-			}
-			
-			
-			
-			
+			}	
 		}
-		
-		
-		
-		
 	}
 	
 

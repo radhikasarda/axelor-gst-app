@@ -68,22 +68,43 @@ public class ServiceImpl implements Service {
 	public Invoice fetchInvoiceData(Invoice invoice) {
 
 		for (Contact partyContactList : invoice.getParty().getContactList()) {
-			if (partyContactList.getType().contains("primary")) {
+			if (partyContactList.getType().equals("primary")) {
 				invoice.setPartyContact(partyContactList);
 			}
 		}
-		for (Address addressList : invoice.getParty().getAddressList()) {
+//		for (Address addressList : invoice.getParty().getAddressList()) {
+//
+//			if (addressList.getType().equals("invoice")) {
+//				invoice.setInvoiceAddress(addressList);
+//			} 
+//			else if (addressList.getType().equals("shipping")) {			
+//				if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
+//					invoice.setShippingAddress(invoice.getInvoiceAddress());
+//				}
+//				invoice.setShippingAddress(addressList);
+//			}
+//		}
 
-			if (addressList.getType().contains("invoice")) {
-				invoice.setInvoiceAddress(addressList);
-			} else if (addressList.getType().contains("shipping")) {
-				invoice.setShippingAddress(addressList);
+		for (Address address : invoice.getParty().getAddressList()) {
+
+			if (address.getType().equals("default")) {
+				invoice.setInvoiceAddress(address);
+				invoice.setShippingAddress(address);
+			} else if (address.getType().equals("invoice")) {
+				invoice.setInvoiceAddress(address);
+
+				if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
+					invoice.setShippingAddress(invoice.getInvoiceAddress());
+				}
+			} else if (address.getType().equals("shipping")) {
+				if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
+					invoice.setShippingAddress(invoice.getInvoiceAddress());
+				} else
+					invoice.setShippingAddress(address);
+
 			}
 		}
 
-		if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
-			invoice.setShippingAddress(invoice.getInvoiceAddress());
-		}
 		return invoice;
 
 	}
@@ -94,19 +115,17 @@ public class ServiceImpl implements Service {
 		String suffix = sequence.getSuffix();
 		int padding = sequence.getPadding();
 		String nextNumber = prefix;
-		if(sequence.getNextNumber()==null) {
+		if (sequence.getNextNumber() == null) {
 
-		for (int i = 0; i < padding; i++) {
-			nextNumber = nextNumber.concat("0");
+			for (int i = 0; i < padding; i++) {
+				nextNumber = nextNumber.concat("0");
+			}
+			if (suffix != null) {
+				nextNumber = nextNumber.concat(suffix);
+			}
+			sequence.setNextNumber(nextNumber);
 		}
-		if(suffix!=null) { 
-			nextNumber=nextNumber.concat(suffix); 
-		}
-		sequence.setNextNumber(nextNumber);
-		}
-		
+
 		return sequence;
-		}
+	}
 }
-
-
