@@ -24,6 +24,10 @@
 	</grid>
 	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults"
 		onSave="action-invoice-method-on-save-generate-reference">
+		<toolbar>
+			<button name="btnPrint" title="Print"
+				onClick="action-invoice-method-print" icon="fa-print" />
+		</toolbar>
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
 				<field name="status" widget="NavSelect" selection="invoice-status-selection" />
@@ -110,4 +114,19 @@
 		<call class="com.axelor.gst.web.Controller" method="getReferenceInvoice" />
 	</action-method>
 
+	<action-group name="action-invoice-method-print">
+	<action name="action-invoice-method-fetch-report-data"/>
+	<action name="action-invoice-method-generate-report"/>
+	</action-group>
+	
+	<action-method name="action-invoice-method-fetch-report-data">
+	<call class="com.axelor.gst.web.Controller" method="fetchReportData"/>
+	</action-method>
+	
+	<action-report output="invoice-report"
+		name="action-invoice-method-generate-report" design="Invoice.rptdesign"
+		format="pdf">
+		<param name="listId" expr="eval: listId" />
+		<param name="filePath" expr="eval: filePath " />
+	</action-report>
 </object-views>

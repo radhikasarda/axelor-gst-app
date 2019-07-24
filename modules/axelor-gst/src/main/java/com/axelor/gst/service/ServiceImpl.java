@@ -72,18 +72,6 @@ public class ServiceImpl implements Service {
 				invoice.setPartyContact(partyContactList);
 			}
 		}
-//		for (Address addressList : invoice.getParty().getAddressList()) {
-//
-//			if (addressList.getType().equals("invoice")) {
-//				invoice.setInvoiceAddress(addressList);
-//			} 
-//			else if (addressList.getType().equals("shipping")) {			
-//				if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
-//					invoice.setShippingAddress(invoice.getInvoiceAddress());
-//				}
-//				invoice.setShippingAddress(addressList);
-//			}
-//		}
 
 		for (Address address : invoice.getParty().getAddressList()) {
 

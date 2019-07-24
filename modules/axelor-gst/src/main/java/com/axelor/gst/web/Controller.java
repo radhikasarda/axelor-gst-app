@@ -1,11 +1,16 @@
 package com.axelor.gst.web;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import javax.inject.Inject;
 
+import com.axelor.app.AppSettings;
 import com.axelor.axelor.gst.db.Address;
 import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
 import com.axelor.axelor.gst.db.Party;
+import com.axelor.axelor.gst.db.Product;
 import com.axelor.axelor.gst.db.Sequence;
 import com.axelor.axelor.gst.db.repo.SequenceRepository;
 import com.axelor.db.Query;
@@ -16,7 +21,7 @@ import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.google.inject.persist.Transactional;
-
+import com.axelor.rpc.Context;
 public class Controller {
 
 	
@@ -74,9 +79,9 @@ public class Controller {
 		if(party.getReference()==null) {
 		MetaModel model = Beans.get(MetaModelRepository.class).findByName("Party");	
 		Sequence sequence=sequenceRepository.all().filter("self.model = "+model.getId()).fetchOne();
-		if(sequence==null) {
+		if(sequence!=null) {
 			System.err.println("No sequence specified");
-		}
+		
 		String refNumber=sequence.getNextNumber();
 		party.setReference(refNumber);
 		String prefix=sequence.getPrefix();
@@ -97,6 +102,8 @@ public class Controller {
 		sequenceRepository.save(sequence);
 		response.setValue("reference", party.getReference());
 		}
+		}
+		else System.err.println("No sequence specified");
 	}
 	@Transactional
 	public void getReferenceInvoice(ActionRequest request, ActionResponse response) {
@@ -105,9 +112,7 @@ public class Controller {
 		if(invoice.getReference()==null ) {
 			MetaModel model = Beans.get(MetaModelRepository.class).findByName("Invoice");	
 			Sequence sequence=sequenceRepository.all().filter("self.model = "+model.getId()).fetchOne();
-			if(sequence==null) {
-				System.err.println("No sequence specified");
-			}
+			if(sequence!=null) {
 			String refNumber=sequence.getNextNumber();
 			invoice.setReference(refNumber);
 			String prefix=sequence.getPrefix();
@@ -127,8 +132,32 @@ public class Controller {
 			sequence.setNextNumber(nextNum);	
 			sequenceRepository.save(sequence);
 			response.setValue("reference", invoice.getReference());
-			}	
+			}
+			else System.err.println("No sequence specified");
+				
 		}
+		}
+	
+	public void fetchReportData(ActionRequest request, ActionResponse response) {
+		
+		Context context = request.getContext();
+		String filePath = AppSettings.get().get("file.upload.dir");	
+		Long ids=(Long) context.get("id");
+		context.put("listId", ids.toString());		
+		context.put("filePath", filePath);
+	
+	}
+	
+	public void fetchGstRate(ActionRequest request, ActionResponse response) {
+		
+		Product product=request.getContext().asType(Product.class);
+		BigDecimal gstRate=BigDecimal.ZERO;
+		gstRate=product.getCategory().getGstRate();
+		product.setGstRate(gstRate);
+		response.setValue("gstRate", gstRate);
+		
+	}
+	
 	}
 	
 

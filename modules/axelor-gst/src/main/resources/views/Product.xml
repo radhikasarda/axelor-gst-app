@@ -29,7 +29,7 @@
 				<field name="name" />
 				<field name="code" />
 				<field name="HSBN" />
-				<field name="category" />
+				<field name="category" onChange="action-product-method-onchange-category"/>
 				<field name="salePrice" />
 				<field name="costPrice" />
 				<field name="gstRate" />
@@ -64,5 +64,9 @@
       </div>
     ]]></template>
 	</cards>
+
+<action-method name="action-product-method-onchange-category">
+<call class="com.axelor.gst.web.Controller" method="fetchGstRate" />
+</action-method>
 
 </object-views>

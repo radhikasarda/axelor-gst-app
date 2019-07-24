@@ -13,7 +13,7 @@
 		<string name="IFSC" title="IFSC" required="true" />
 		<string name="type" title="Type" />
 		<string name="address" title="Address" />
-		<many-to-one name="company" title="Comapny"
+		<many-to-one name="company" title="Company"
 			ref="com.axelor.axelor.gst.db.Company" />
 	</entity>
 </domain-models>
