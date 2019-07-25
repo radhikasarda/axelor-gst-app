@@ -22,7 +22,7 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults"
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults,action-invoice-method-getInvoiceLineDetails"
 		onSave="action-invoice-method-on-save-generate-reference">
 		<toolbar>
 			<button name="btnPrint" title="Print"
@@ -106,10 +106,18 @@
 		<attribute name="hidden" for="btnPaid" expr="true" />
 	</action-attrs>
 
-	<action-method name="action-invoice-method-onChange-party">
-		<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData" />
+	<action-group name="action-invoice-method-onChange-party">
+	<action name="action-method-invoice-onChange-party-calculateInvoiceData"/>
+	<action name="action-method-invoice-onChange-party-calculate"/>
+	</action-group>
+	
+	<action-method name="action-method-invoice-onChange-party-calculateInvoiceData">
+		<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData" />	
 	</action-method>
-
+	<action-method name="action-method-invoice-onChange-party-calculate">
+		<call class="com.axelor.gst.web.Controller" method="calculateInvoice" />	
+	</action-method>
+	
 	<action-method name="action-invoice-method-on-save-generate-reference">
 		<call class="com.axelor.gst.web.Controller" method="getReferenceInvoice" />
 	</action-method>
@@ -129,4 +137,13 @@
 		<param name="listId" expr="eval: listId" />
 		<param name="filePath" expr="eval: filePath " />
 	</action-report>
+	
+	<action-group name="action-invoice-method-getInvoiceLineDetails">
+	<action name="action-fetch-invoiceData"/>
+	<action name="action-method-invoice-onChange-party-calculate"/>
+	</action-group>
+	<action-method name="action-fetch-invoiceData">
+	<call class="com.axelor.gst.web.Controller" method="fetchInvoiceLineData"/>
+	</action-method>
+	
 </object-views>

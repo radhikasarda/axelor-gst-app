@@ -22,16 +22,24 @@ public class ServiceImpl implements Service {
 		BigDecimal grossAmount = BigDecimal.ZERO;
 
 		netAmount = invoiceLine.getPrice().multiply(new BigDecimal(invoiceLine.getQty()));
-		if (!invoiceAddress.getState().getName().equals(companyAddress.getState().getName())) {
-			igst = netAmount.multiply(invoiceLine.getGstRate());
-			invoiceLine.setIGST(igst);
-			invoiceLine.setGrossAmount(netAmount.add(igst));
-		} else {
-			sgst = netAmount.multiply(invoiceLine.getGstRate()).divide(new BigDecimal(200));
-			invoiceLine.setSGST(sgst);
+		if(invoiceAddress!=null && companyAddress!=null) {
+			if (!invoiceAddress.getState().getName().equals(companyAddress.getState().getName())) {
+				igst = netAmount.multiply(invoiceLine.getGstRate());
+				invoiceLine.setIGST(igst);
+				invoiceLine.setGrossAmount(netAmount.add(igst));
+				invoiceLine.setSGST(BigDecimal.ZERO);
 
-			invoiceLine.setCGST(sgst);
-			invoiceLine.setGrossAmount(netAmount.add(sgst).add(sgst));
+				invoiceLine.setCGST(BigDecimal.ZERO);
+			} else {
+				sgst = netAmount.multiply(invoiceLine.getGstRate()).divide(new BigDecimal(200));
+				invoiceLine.setSGST(sgst);
+
+				invoiceLine.setCGST(sgst);
+				invoiceLine.setGrossAmount(netAmount.add(sgst).add(sgst));
+				invoiceLine.setIGST(BigDecimal.ZERO);
+			}
+		}else {
+			invoiceLine.setGrossAmount(netAmount);
 		}
 
 		invoiceLine.setNetAmount(netAmount);
@@ -46,7 +54,9 @@ public class ServiceImpl implements Service {
 		BigDecimal invoicecgst = BigDecimal.ZERO;
 		BigDecimal invoicegrossAmount = BigDecimal.ZERO;
 
+		
 		for (InvoiceLine invoiceItemsList : invoice.getInvoiceItemsList()) {
+			
 
 			invoiceNetAmount = invoiceNetAmount.add(invoiceItemsList.getNetAmount());
 			invoiceigst = invoiceigst.add(invoiceItemsList.getIGST());

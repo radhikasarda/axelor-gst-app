@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object-views xmlns="http://axelor.com/xml/ns/object-views"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<object-views xmlns="http://axelor.com/xml/ns/object-views" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
   http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
 
-	<grid name="product-grid" title="Product"
-		model="com.axelor.axelor.gst.db.Product">
+	<grid name="product-grid" title="Product" model="com.axelor.axelor.gst.db.Product">
 		<toolbar>
-			<button name="reportBtn" title="Print"
-				onClick="action-product-method-print" icon="fa-print" />
+			<button name="reportBtn" title="Print" onClick="action-product-method-print" icon="fa-print" />
+			<button name="reportBtn" title="Create Invoice" onClick="action-product-method-create-invoice"/>
 		</toolbar>
 		<field name="name" />
 		<field name="code" />
@@ -18,18 +16,16 @@
 		<field name="costPrice" />
 		<field name="gstRate" />
 	</grid>
-	<form name="product-form" title="Product"
-		model="com.axelor.axelor.gst.db.Product">
+	<form name="product-form" title="Product" model="com.axelor.axelor.gst.db.Product">
 		<panel title="Product" css="panel-green">
 			<panel colSpan="4">
-				<field name="image" showTitle="false" colSpan="12"
-					widget="image" />
+				<field name="image" showTitle="false" colSpan="12" widget="image" />
 			</panel>
 			<panel colSpan="8">
 				<field name="name" />
 				<field name="code" />
 				<field name="HSBN" />
-				<field name="category" onChange="action-product-method-onchange-category"/>
+				<field name="category" onChange="action-product-method-onchange-category" />
 				<field name="salePrice" />
 				<field name="costPrice" />
 				<field name="gstRate" />
@@ -37,8 +33,7 @@
 		</panel>
 	</form>
 
-	<cards name="product-card" title="Product"
-		model="com.axelor.axelor.gst.db.Product" orderBy="name">
+	<cards name="product-card" title="Product" model="com.axelor.axelor.gst.db.Product" orderBy="name">
 		<field name="name" />
 		<field name="code" />
 		<field name="HSBN" />
@@ -65,23 +60,25 @@
     ]]></template>
 	</cards>
 
-<action-method name="action-product-method-onchange-category">
-<call class="com.axelor.gst.web.Controller" method="fetchGstRate" />
-</action-method>
-
-<action-group name="action-product-method-print">
-	<action name="action-product-method-fetch-report-data"/>
-	<action name="action-product-method-generate-report"/>
-	</action-group>
-	
-	<action-method name="action-product-method-fetch-report-data">
-	<call class="com.axelor.gst.web.Controller" method="fetchReportData"/>
+	<action-method name="action-product-method-onchange-category">
+		<call class="com.axelor.gst.web.Controller" method="fetchGstRate" />
 	</action-method>
-	
-	<action-report output="product-report"
-		name="action-product-method-generate-report" design="Product.rptdesign"
-		format="pdf">
+
+	<action-group name="action-product-method-print">
+		<action name="action-product-method-fetch-report-data" />
+		<action name="action-product-method-generate-report" />
+	</action-group>
+
+	<action-method name="action-product-method-fetch-report-data">
+		<call class="com.axelor.gst.web.Controller" method="fetchReportData" />
+	</action-method>
+
+	<action-report output="product-report" name="action-product-method-generate-report" design="Product.rptdesign" format="pdf">
 		<param name="listId" expr="eval: listId" />
 		<param name="filePath" expr="eval: filePath " />
 	</action-report>
+	
+	<action-method name="action-product-method-create-invoice">
+		<call class="com.axelor.gst.web.Controller" method="createInvoice" />
+	</action-method>
 </object-views>

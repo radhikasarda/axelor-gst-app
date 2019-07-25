@@ -108,13 +108,20 @@
 		<view type="form" name="invoice-form" />
 	</action-view>
 
+	<menuitem name="invoice-root-draft-invoice" parent="invoice-root" title="Draft Invoice"
+		action="invoice-root-validated-invoice.view.draft-invoice" />
+
+	<action-view name="invoice-root-validated-invoice.view.draft-invoice" title="Draft Invoice" model="com.axelor.axelor.gst.db.Invoice">
+		<view type="grid" name="invoice-grid" />
+		<domain>self.status='draft'</domain>
+	</action-view>
+	
 	<menuitem name="invoice-root-validated-invoice" parent="invoice-root" title="Validated Invoice"
 		action="invoice-root-validated-invoice.view.validated-invoice" />
 
 	<action-view name="invoice-root-validated-invoice.view.validated-invoice" title="Validated Invoice" model="com.axelor.axelor.gst.db.Invoice">
 		<view type="grid" name="invoice-grid" />
 		<domain>self.status='validated'</domain>
-
 	</action-view>
 
 	<menuitem name="invoice-root-paid-invoice" parent="invoice-root" title="Paid Invoice"
