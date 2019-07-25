@@ -93,7 +93,6 @@ public class Controller {
 		for (int i = 0; i <( sequence.getPadding() - newStringNumber.length()); i++) {
 				prefix=prefix.concat("0");
 		}
-		System.out.println(newStringNumber);
 		String nextNum=prefix+newStringNumber;
 		if(suffix!=null) { 
 		nextNum=nextNum+suffix;
@@ -142,8 +141,15 @@ public class Controller {
 		
 		Context context = request.getContext();
 		String filePath = AppSettings.get().get("file.upload.dir");	
+		List<String> list = (List<String>) context.get("_ids");
+		if(list!=null) {
+		String lists = list.toString();
+		context.put("listId", lists.substring(1, lists.length() - 1));
+		}
+		else {
 		Long ids=(Long) context.get("id");
 		context.put("listId", ids.toString());		
+		}	
 		context.put("filePath", filePath);
 	
 	}
