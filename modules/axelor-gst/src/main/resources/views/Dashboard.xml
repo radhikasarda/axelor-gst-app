@@ -23,6 +23,6 @@
 
 	<action-view name="dashlet.invoices.older.notpaid" title="Older Invoices Not paid" model="com.axelor.axelor.gst.db.Invoice">
 		<view type="grid" name="invoice-grid" />
-		<domain>self.status in ('validated') and self.status NOT in ('paid')</domain>
+		<domain>self.invoiceDate &lt; date(now()) - 30 and self.status in ('validated') and self.status NOT in ('paid')</domain>
 	</action-view>
 </object-views>
