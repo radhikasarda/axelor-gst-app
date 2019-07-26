@@ -19,16 +19,37 @@
       group by party.name 
     ]]>
     </dataset>
-<!-- 		<category key="count" type="number" />
-		<series key="name" groupBy="name" type="bar" /> -->
 		<category key="name" type="text" />
 		<series key="count" groupBy="name" type="bar" />
+	</chart>
+
+
+
+<chart onInit="action.invoice.chart.set.date" name="chart.paid.invoices.per.category.per.product" title="Paid Invoices per category per product" >
+	  <search-fields>
+	    <field name="fromDate" type="date" title="From Date" x-required="true"/>
+	    <field name="toDate" type="date" title="To Date" x-required="true" />
+	  </search-fields>
+		<dataset type="sql">
+    <![CDATA[
+ 	select count(invoice.id) as count,
+ 	product.name as product_name,
+ 	product_category.name as category_name 
+ 	from gst_invoice as invoice 
+ 	left join gst_invoice_line as invoiceLine on invoice.id=invoiceLine.invoice 
+ 	left join gst_product as product on product.id=invoiceLine.product 
+ 	left join gst_product_category as product_category on product_category.id=product.category 
+ 	where invoice.status='paid' 
+ 	AND DATE(invoice.created_on) BETWEEN DATE(:fromDate) AND DATE(:toDate)
+ 	group by category_name,product_name;
+    ]]>
+    </dataset>
+		<category key="category_name" type="text" />
+		<series key="count" groupBy="product_name" type="bar" />
 	</chart>
 
 <action-record model="com.axelor.axelor.gst.db.Invoice" name="action.invoice.chart.set.date">
 	  <field name="toDate" expr="eval:__date__"/>
 	  <field name="fromDate" expr="eval:__date__.withDayOfMonth(1)"/>
 </action-record>
-
-
 </object-views>
