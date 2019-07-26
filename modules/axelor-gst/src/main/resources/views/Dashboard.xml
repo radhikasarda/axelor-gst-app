@@ -6,6 +6,7 @@
   
     <dashboard name="welcome.dashboard" title="Dashboard">
     <dashlet action="grid:invoice-grid" colSpan="4"/>
+    <dashlet action="chart:chart.unpaid.invoices.per.customer" colSpan="4"/>
   
   </dashboard>
 
