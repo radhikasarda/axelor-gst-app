@@ -60,6 +60,32 @@
 		<series key="count" groupBy="state.name" type="pie" />
 	</chart>
 
+	<chart  name="chart.invoices.per.status.per.amount" title="Invoices per Status:Amount">
+		<dataset type="sql">
+    <![CDATA[
+	select sum(gross_amount) as amount, status 
+	from gst_invoice 
+	group by status;
+
+    ]]>
+    </dataset>
+		<category key="status" type="text" />
+		<series key="amount" groupBy="status" type="bar" />
+	</chart>
+	
+	
+	<chart  name="chart.invoices.per.status.noOfInvoices" title="Invoices per Status:No. of Invoices">
+		<dataset type="sql">
+    <![CDATA[
+	select count(*) as count, status 
+	from gst_invoice 
+	group by status;
+    ]]>
+    </dataset>
+		<category key="count" type="number" />
+		<series key="status" groupBy="status" type="line" />
+	</chart>
+
 	<action-record model="com.axelor.axelor.gst.db.Invoice" name="action.invoice.chart.set.date">
 		<field name="toDate" expr="eval:__date__" />
 		<field name="fromDate" expr="eval:__date__.withDayOfMonth(1)" />
