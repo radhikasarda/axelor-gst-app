@@ -4,24 +4,26 @@
   http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
 
 	<grid name="sequence-grid" title="Sequence" model="com.axelor.axelor.gst.db.Sequence">
-		<field name="prefix"/>
+		<field name="prefix" />
 		<field name="suffix" />
-		<field name="padding"/>
+		<field name="padding" />
 		<field name="nextNumber" />
-		<field name="model"/>
+		<field name="model" />
 
 	</grid>
+
 	<form name="sequence-form" title="Sequence" model="com.axelor.axelor.gst.db.Sequence" onSave="action-sequence-method-generate-next-number">
 		<panel title="Sequence" css="panel-blue">
-		<field name="prefix"/>
-		<field name="suffix" />
-		<field name="padding"/>
-		<field name="nextNumber" />
-		<field name="model"/>
+			<field name="prefix" />
+			<field name="suffix" />
+			<field name="padding" />
+			<field name="nextNumber" />
+			<field name="model" />
 		</panel>
 	</form>
 
-<action-method name="action-sequence-method-generate-next-number">
-<call class="com.axelor.gst.web.Controller" method="generateNextNumber" />
-</action-method>
+	<action-method name="action-sequence-method-generate-next-number">
+		<call class="com.axelor.gst.web.SequenceController" method="generateNextNumber" />
+	</action-method>
+
 </object-views>

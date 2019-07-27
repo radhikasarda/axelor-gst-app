@@ -5,7 +5,7 @@
 
 	<grid name="product-grid" title="Product" model="com.axelor.axelor.gst.db.Product">
 		<toolbar>
-			<button name="reportBtn" title="Print" onClick="action-product-method-print" icon="fa-print" />
+			<button name="reportBtn" title="Print" onClick="action-product-method-print-report" icon="fa-print" />
 			<button name="reportBtn" title="Create Invoice" onClick="action-product-method-create-invoice"/>
 		</toolbar>
 		<field name="name" />
@@ -61,16 +61,16 @@
 	</cards>
 
 	<action-method name="action-product-method-onchange-category">
-		<call class="com.axelor.gst.web.Controller" method="fetchGstRate" />
+		<call class="com.axelor.gst.web.ProductController" method="fetchGstRate" />
 	</action-method>
 
-	<action-group name="action-product-method-print">
+	<action-group name="action-product-method-print-report">
 		<action name="action-product-method-fetch-report-data" />
 		<action name="action-product-method-generate-report" />
 	</action-group>
 
 	<action-method name="action-product-method-fetch-report-data">
-		<call class="com.axelor.gst.web.Controller" method="fetchReportData" />
+		<call class="com.axelor.gst.web.ProductController" method="fetchReportData" />
 	</action-method>
 
 	<action-report output="product-report" name="action-product-method-generate-report" design="Product.rptdesign" format="pdf">
@@ -79,6 +79,6 @@
 	</action-report>
 	
 	<action-method name="action-product-method-create-invoice">
-		<call class="com.axelor.gst.web.Controller" method="createInvoice" />
+		<call class="com.axelor.gst.web.InvoiceController" method="createInvoice" />
 	</action-method>
 </object-views>

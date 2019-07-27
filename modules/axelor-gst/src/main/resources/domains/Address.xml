@@ -14,6 +14,9 @@
     if (line2 == null ) {
         return "Type:" + type + " " + "Line 1:" + line1 + " " + "City:" + city.getName() + " " + "State:" + state.getName();
     }
+    if(state.getName() == null){
+    return "Type:" + type + " " + "Line 1:" + line1 + " " + "City:" + city.getName();
+    }
     return "Type:" + type + " " + "Line 1:" + line1 + "Line 2:" + line2 + " " + "City:" + city.getName() + " " + "State:" + state.getName();
     ]]>
 				

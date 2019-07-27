@@ -78,6 +78,6 @@
 	</action-record>
 
 	<action-method name="action-party-method-on-save-generate-reference">
-		<call class="com.axelor.gst.web.Controller" method="generateReferenceParty" />
+		<call class="com.axelor.gst.web.SequenceController" method="generateReference" />
 	</action-method>
 </object-views>

@@ -9,8 +9,7 @@
 		<dashlet action="chart:chart.customer.per.state" colSpan="4" />
 		<dashlet action="chart:chart.invoices.per.status.per.amount" colSpan="4" />
 		<dashlet action="chart:chart.invoices.per.status.noOfInvoices" colSpan="4" />
-		<dashlet action="dashlet.invoices.older.notpaid" colSpan="4" />
-		
+		<dashlet action="dashlet.invoices.older.notpaid" colSpan="12" />
 	</dashboard>
 
 	<action-view name="welcome" title="Dashboard">
@@ -23,6 +22,6 @@
 
 	<action-view name="dashlet.invoices.older.notpaid" title="Older Invoices Not paid" model="com.axelor.axelor.gst.db.Invoice">
 		<view type="grid" name="invoice-grid" />
-		<domain>self.invoiceDate &lt; date(now()) - 30 and self.status in ('validated') and self.status NOT in ('paid')</domain>
+		<domain>self.invoiceDate &lt; date(now()) - 30 and self.status ='validated' and self.status!='paid'</domain>
 	</action-view>
 </object-views>

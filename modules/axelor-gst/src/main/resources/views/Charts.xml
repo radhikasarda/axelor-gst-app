@@ -9,14 +9,20 @@
 		</search-fields>
 		<dataset type="sql">
     <![CDATA[
-      select count(*) as count,party.name as name
+      select 
+      	count(*) as count,
+      	party.name as name
+      
       from gst_invoice as invoice 
-      left join gst_party as party 
-      on invoice.party=party.id 
-      where invoice.status in('draft','validated')
-      AND DATE(invoice.created_on) BETWEEN DATE(:fromDate) AND DATE(:toDate)
-      AND party.customer  
-      group by party.name 
+      left join gst_party as party on invoice.party=party.id 
+      where 
+      	invoice.status in('draft','validated') AND 
+      	DATE(invoice.created_on) BETWEEN DATE(:fromDate) AND 
+      	DATE(:toDate) AND 
+      	party.customer
+      	  
+      group by 
+      	party.name 
     ]]>
     </dataset>
 		<category key="name" type="text" />
@@ -30,16 +36,24 @@
 		</search-fields>
 		<dataset type="sql">
     <![CDATA[
- 	select count(invoice.id) as count,
- 	product.name as product_name,
- 	product_category.name as category_name 
+ 	  select 
+ 		count(invoice.id) as count,
+ 		product.name as product_name,
+ 		product_category.name as category_name 
+ 	
  	from gst_invoice as invoice 
  	left join gst_invoice_line as invoiceLine on invoice.id=invoiceLine.invoice 
  	left join gst_product as product on product.id=invoiceLine.product 
  	left join gst_product_category as product_category on product_category.id=product.category 
- 	where invoice.status='paid' 
- 	AND DATE(invoice.created_on) BETWEEN DATE(:fromDate) AND DATE(:toDate)
- 	group by category_name,product_name;
+ 	
+ 	where 
+ 		invoice.status='paid' AND 
+ 		DATE(invoice.created_on) BETWEEN DATE(:fromDate) AND 
+ 		DATE(:toDate)
+ 	
+ 	group by 
+ 		category_name,
+ 		product_name;
     ]]>
     </dataset>
 		<category key="category_name" type="text" />
@@ -49,37 +63,50 @@
 	<chart name="chart.customer.per.state" title="Customer per state">
 		<dataset type="sql">
     <![CDATA[
-	select count(*) as count,state.name as state 
+	select 
+		count(*) as count,
+		state.name as state 
+	
 	from gst_party as party 
 	left join gst_address as address on party.id=address.party 
 	left join gst_state as state on state.id=address.state 
-	where party.customer group by state.name;
+	
+	where 
+		party.customer 
+	group by 
+		state.name;
     ]]>
     </dataset>
 		<category key="count" type="number" />
 		<series key="count" groupBy="state.name" type="pie" />
 	</chart>
 
-	<chart  name="chart.invoices.per.status.per.amount" title="Invoices per Status:Amount">
+	<chart name="chart.invoices.per.status.per.amount" title="Invoices per Status:Amount">
 		<dataset type="sql">
     <![CDATA[
-	select sum(gross_amount) as amount, status 
+	select 
+		sum(gross_amount) as amount, 
+		status 
 	from gst_invoice 
-	group by status;
+	group by 
+		status;
 
     ]]>
     </dataset>
 		<category key="status" type="text" />
 		<series key="amount" groupBy="status" type="bar" />
 	</chart>
-	
-	
-	<chart  name="chart.invoices.per.status.noOfInvoices" title="Invoices per Status:No. of Invoices">
+
+
+	<chart name="chart.invoices.per.status.noOfInvoices" title="Invoices per Status:No. of Invoices">
 		<dataset type="sql">
     <![CDATA[
-	select count(*) as count, status 
+	select 
+		count(*) as count, 
+		status 
 	from gst_invoice 
-	group by status;
+	group by 
+		status;
     ]]>
     </dataset>
 		<category key="count" type="number" />

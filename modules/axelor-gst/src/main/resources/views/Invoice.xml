@@ -22,11 +22,10 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" onNew="action-invoice-method-set-defaults,action-invoice-method-getInvoiceLineDetails"
-		onSave="action-invoice-method-on-save-generate-reference">
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large"
+		onNew="action-invoice-method-set-defaults,action-invoice-method-getInvoiceLineDetails">
 		<toolbar>
-			<button name="btnPrint" title="Print"
-				onClick="action-invoice-method-print" icon="fa-print" />
+			<button name="btnPrint" title="Print" onClick="action-invoice-method-print" icon="fa-print" />
 		</toolbar>
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
@@ -54,13 +53,14 @@
 			<field name="grossAmount" />
 		</panel>
 		<panel sidebar="true">
-			<button name="btnValidate" title="Validate" onClick="action-invoice-method-buttonValidate-on-click" />
-			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-buttonCancel-on-click" />
-			<button name="btnPaid" title="Paid" onClick="action-invoice-method-buttonPaid-on-click" />
+			<button name="btnValidate" title="Validate" onClick="action-invoice-method-buttonValidate-on-click,action-invoice-method-on-save-generate-reference,save" showIf="status == 'draft'"/>
+			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-buttonCancel-on-click,save" hideIf="status=='cancelled'"/>
+			<button name="btnPaid" title="Paid" onClick="action-invoice-method-buttonPaid-on-click,save" showIf="status == 'validated'"/>
 		</panel>
 	</form>
 
-	<kanban name="invoice-kanban" title="All Invoice" model="com.axelor.axelor.gst.db.Invoice" columnBy="status" sequenceBy="priority" limit="10">
+	<kanban name="invoice-kanban" title="All Invoice" model="com.axelor.axelor.gst.db.Invoice" columnBy="status" sequenceBy="priority" limit="10"
+		onMove="action-invoice-method-on-move-kanban">
 		<field name="company" />
 		<field name="netAmount" />
 		<field name="grossAmount" />
@@ -87,63 +87,61 @@
 	</action-record>
 
 	<action-method name="action-invoice-net-calculation">
-		<call class="com.axelor.gst.web.Controller" method="calculateInvoice" />
+		<call class="com.axelor.gst.web.InvoiceController" method="calculateInvoice" />
 	</action-method>
 
 	<action-attrs name="action-invoice-method-buttonValidate-on-click">
-		<attribute name="value" for="status" expr="validated" />
-		<attribute name="hidden" for="btnValidate" expr="true" />
+		<attribute name="value" for="status" expr="validated" />		
 	</action-attrs>
 
 	<action-attrs name="action-invoice-method-buttonCancel-on-click">
 		<attribute name="value" for="status" expr="cancelled" />
-		<attribute name="hidden" for="btnValidate" expr="true" />
-		<attribute name="hidden" for="btnCancel" expr="true" />
 	</action-attrs>
 
 	<action-attrs name="action-invoice-method-buttonPaid-on-click">
 		<attribute name="value" for="status" expr="paid" />
-		<attribute name="hidden" for="btnPaid" expr="true" />
 	</action-attrs>
 
 	<action-group name="action-invoice-method-onChange-party">
-	<action name="action-method-invoice-onChange-party-calculateInvoiceData"/>
-	<action name="action-method-invoice-onChange-party-calculate"/>
+		<action name="action-method-invoice-onChange-party-calculateInvoiceData" />
+		<action name="action-method-invoice-onChange-party-calculate" />
 	</action-group>
-	
+
 	<action-method name="action-method-invoice-onChange-party-calculateInvoiceData">
-		<call class="com.axelor.gst.web.Controller" method="fetchInvoiceData" />	
+		<call class="com.axelor.gst.web.InvoiceController" method="fetchInvoiceData" />
 	</action-method>
 	<action-method name="action-method-invoice-onChange-party-calculate">
-		<call class="com.axelor.gst.web.Controller" method="calculateInvoice" />	
+		<call class="com.axelor.gst.web.InvoiceController" method="calculateInvoice" />
 	</action-method>
-	
+
 	<action-method name="action-invoice-method-on-save-generate-reference">
-		<call class="com.axelor.gst.web.Controller" method="getReferenceInvoice" />
+		<call class="com.axelor.gst.web.SequenceController" method="generateReference" />
 	</action-method>
 
 	<action-group name="action-invoice-method-print">
-	<action name="action-invoice-method-fetch-report-data"/>
-	<action name="action-invoice-method-generate-report"/>
+		<action name="action-invoice-method-fetch-report-data" />
+		<action name="action-invoice-method-generate-report" />
 	</action-group>
-	
+
 	<action-method name="action-invoice-method-fetch-report-data">
-	<call class="com.axelor.gst.web.Controller" method="fetchReportData"/>
+		<call class="com.axelor.gst.web.InvoiceController" method="fetchReportData" />
 	</action-method>
-	
-	<action-report output="invoice-report"
-		name="action-invoice-method-generate-report" design="Invoice.rptdesign"
-		format="pdf">
+
+	<action-report output="invoice-report" name="action-invoice-method-generate-report" design="Invoice.rptdesign" format="pdf">
 		<param name="listId" expr="eval: listId" />
 		<param name="filePath" expr="eval: filePath " />
 	</action-report>
-	
+
 	<action-group name="action-invoice-method-getInvoiceLineDetails">
-	<action name="action-fetch-invoiceData"/>
-	<action name="action-method-invoice-onChange-party-calculate"/>
+		<action name="action-invoice-method-fetch-invoiceData" />
+		<action name="action-method-invoice-onChange-party-calculate" />
 	</action-group>
-	<action-method name="action-fetch-invoiceData">
-	<call class="com.axelor.gst.web.Controller" method="fetchInvoiceLineData"/>
+	<action-method name="action-invoice-method-fetch-invoiceData">
+		<call class="com.axelor.gst.web.InvoiceController" method="fetchInvoiceLineData" />
 	</action-method>
-	
+
+	<action-validate name="action-invoice-method-on-move-kanban" >
+	<error message="This action is not Permitted!!" if="status=='draft'"/>
+	</action-validate>
+
 </object-views>
