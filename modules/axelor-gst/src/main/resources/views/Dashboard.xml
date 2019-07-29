@@ -9,7 +9,7 @@
 		<dashlet action="chart:chart.customer.per.state" colSpan="4" />
 		<dashlet action="chart:chart.invoices.per.status.per.amount" colSpan="4" />
 		<dashlet action="chart:chart.invoices.per.status.noOfInvoices" colSpan="4" />
-		<dashlet action="dashlet.invoices.older.notpaid" colSpan="12" />
+		<dashlet action="dashlet.invoices.older.notpaid" colSpan="12"  />
 	</dashboard>
 
 	<action-view name="welcome" title="Dashboard">

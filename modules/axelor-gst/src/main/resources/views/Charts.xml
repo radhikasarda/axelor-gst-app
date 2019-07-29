@@ -105,12 +105,11 @@
 		count(*) as count, 
 		status 
 	from gst_invoice 
-	group by 
-		status;
+	group by status;
     ]]>
     </dataset>
 		<category key="count" type="number" />
-		<series key="status" groupBy="status" type="line" />
+		<series key="status" groupBy="status"  type="line" />
 	</chart>
 
 	<action-record model="com.axelor.axelor.gst.db.Invoice" name="action.invoice.chart.set.date">

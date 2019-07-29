@@ -6,7 +6,7 @@
 	<grid name="product-grid" title="Product" model="com.axelor.axelor.gst.db.Product">
 		<toolbar>
 			<button name="reportBtn" title="Print" onClick="action-product-method-print-report" icon="fa-print" />
-			<button name="reportBtn" title="Create Invoice" onClick="action-product-method-create-invoice"/>
+			<button name="createInvoiceBtn" title="Create Invoice" onClick="action-product-method-create-invoice"/>
 		</toolbar>
 		<field name="name" />
 		<field name="code" />
@@ -77,8 +77,10 @@
 		<param name="listId" expr="eval: listId" />
 		<param name="filePath" expr="eval: filePath " />
 	</action-report>
+
 	
 	<action-method name="action-product-method-create-invoice">
 		<call class="com.axelor.gst.web.InvoiceController" method="createInvoice" />
 	</action-method>
+
 </object-views>

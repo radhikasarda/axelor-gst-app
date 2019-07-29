@@ -49,6 +49,7 @@ public class InvoiceController {
 			for (InvoiceLine invoiceLineItem : invoiceLineList) {
 				InvoiceLine invoiceline = invoiceLineService.calculateInvoiceLine(invoiceLineItem,
 						invoice.getInvoiceAddress(), invoice.getCompany().getAddress());
+				System.out.println("After calculation:::::::::::::::::::::::::"+invoiceline);
 				invoiceLineItems.add(invoiceline);
 			}
 			invoice.setInvoiceItemsList(invoiceLineItems);
@@ -83,6 +84,7 @@ public class InvoiceController {
 				invoiceLine.setProduct(product);
 				invoiceLine.setItem(product.getName());
 				invoiceLine.setHSBN(product.getHSBN());
+				invoiceLine.setQty(1);
 				invoiceLine.setPrice(product.getSalePrice());
 				invoiceLine.setGstRate(product.getGstRate());
 				invoiceLineList.add(invoiceLine);

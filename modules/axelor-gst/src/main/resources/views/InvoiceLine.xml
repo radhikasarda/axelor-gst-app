@@ -43,7 +43,7 @@
 	</action-record>
 
 
-	<action-method name="action-invoiceline-method-qty-onchange">
+	<action-method name="action-invoiceLine-method-qty-onchange">
 		<call class="com.axelor.gst.web.InvoiceLineController" method="calculateInvoiceLine" />
 	</action-method>
 </object-views>
