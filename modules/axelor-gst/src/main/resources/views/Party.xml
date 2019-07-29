@@ -35,11 +35,11 @@
 				<field name="addressList" colSpan="12">
 					<editor>
 						<field name="type" selection="address.type.selection" />
+						<field name="country" />
+						<field name="state" />
+						<field name="city" />
 						<field name="line1" />
 						<field name="line2" />
-						<field name="city" />
-						<field name="state" />
-						<field name="country" />
 						<field name="pincode" />
 					</editor>
 				</field>

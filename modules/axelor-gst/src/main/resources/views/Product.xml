@@ -60,9 +60,10 @@
     ]]></template>
 	</cards>
 
-	<action-method name="action-product-method-onchange-category">
-		<call class="com.axelor.gst.web.ProductController" method="fetchGstRate" />
-	</action-method>
+		<action-attrs name="action-product-method-onchange-category">
+ <attribute for="gstRate" name="value" expr="eval: category?.gstRate" /> 
+
+		</action-attrs>
 
 	<action-group name="action-product-method-print-report">
 		<action name="action-product-method-fetch-report-data" />

@@ -111,6 +111,7 @@
 
 	<action-view name="invoice-root-validated-invoice.view.draft-invoice" title="Draft Invoice" model="com.axelor.axelor.gst.db.Invoice">
 		<view type="grid" name="invoice-grid" />
+		<view type="form" name="invoice-form" />
 		<domain>self.status='draft'</domain>
 	</action-view>
 
@@ -119,6 +120,7 @@
 
 	<action-view name="invoice-root-validated-invoice.view.validated-invoice" title="Validated Invoice" model="com.axelor.axelor.gst.db.Invoice">
 		<view type="grid" name="invoice-grid" />
+		<view type="form" name="invoice-form" />
 		<domain>self.status='validated'</domain>
 	</action-view>
 
@@ -126,6 +128,7 @@
 
 	<action-view name="invoice-root-paid-invoice.view.paid-invoice" title="Paid Invoice" model="com.axelor.axelor.gst.db.Invoice">
 		<view type="grid" name="invoice-grid" />
+		<view type="form" name="invoice-form" />
 		<domain>self.status='paid'</domain>
 
 	</action-view>
@@ -135,6 +138,7 @@
 
 	<action-view name="invoice-root-cancelled-invoice.view.cancelled-invoice" title="Cancelled Invoice" model="com.axelor.axelor.gst.db.Invoice">
 		<view type="grid" name="invoice-grid" />
+		<view type="form" name="invoice-form" />
 		<domain>self.status='cancelled'</domain>
 
 	</action-view>

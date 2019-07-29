@@ -38,9 +38,9 @@
 			<field name="invoiceDate" />
 			<field name="priority" />
 			<field name="party" onChange="action-invoice-method-onChange-party" />
-			<field name="partyContact" />
-			<field name="invoiceAddress" />
-			<field name="shippingAddress" />
+			<field name="partyContact" domain="self.party = :party"/>
+			<field name="invoiceAddress" domain="self.party = :party"/>
+			<field name="shippingAddress" domain="self.party = :party"/>
 			<field name="useInvoiceAddress" onChange="action-invoice-method-onChange-party" />
 		</panel>
 

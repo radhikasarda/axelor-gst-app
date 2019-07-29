@@ -43,7 +43,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	@Override
 	public Invoice fetchInvoiceData(Invoice invoice) {
-
+		
+		if(invoice.getParty()==null) {
+			invoice.setInvoiceAddress(null);
+			invoice.setShippingAddress(null);
+			invoice.setPartyContact(null);
+		}
+		else {
 		for (Contact partyContactList : invoice.getParty().getContactList()) {
 			if (partyContactList.getType().equals("primary")) {
 				invoice.setPartyContact(partyContactList);
@@ -68,6 +74,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 					invoice.setShippingAddress(address);
 
 			}
+		}
 		}
 
 		return invoice;

@@ -19,6 +19,7 @@ public class InvoiceLineController {
 		Invoice invoice = request.getContext().getParent().asType(Invoice.class);
 
 		Address invoiceAddress = invoice.getInvoiceAddress();
+		if(invoice.getCompany()!=null) {
 		Address companyAddress = invoice.getCompany().getAddress();
 		invoiceline = invoiceLineService.calculateInvoiceLine(invoiceline, invoiceAddress, companyAddress);
 		response.setValue("netAmount", invoiceline.getNetAmount());
@@ -26,5 +27,6 @@ public class InvoiceLineController {
 		response.setValue("SGST", invoiceline.getSGST());
 		response.setValue("CGST", invoiceline.getCGST());
 		response.setValue("grossAmount", invoiceline.getGrossAmount());
+		}else {response.setError("No company selected");}
 	}
 }

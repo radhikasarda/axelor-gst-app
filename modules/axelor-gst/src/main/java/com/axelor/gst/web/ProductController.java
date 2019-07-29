@@ -1,25 +1,16 @@
 package com.axelor.gst.web;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 
 import com.axelor.app.AppSettings;
-import com.axelor.axelor.gst.db.Product;
+
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
 
 public class ProductController {
 
-	public void fetchGstRate(ActionRequest request, ActionResponse response) {
-
-		Product product = request.getContext().asType(Product.class);
-		BigDecimal gstRate = BigDecimal.ZERO;
-		gstRate = product.getCategory().getGstRate();
-		product.setGstRate(gstRate);
-		response.setValue("gstRate", gstRate);
-
-	}
 
 	public void fetchReportData(ActionRequest request, ActionResponse response) {
 
