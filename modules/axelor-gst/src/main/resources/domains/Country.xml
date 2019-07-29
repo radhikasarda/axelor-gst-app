@@ -9,6 +9,6 @@
 
 	<entity name="Country">
 
-		<string name="name" required="true"/>
+		<string name="name" required="true" />
 	</entity>
 </domain-models>

@@ -53,7 +53,7 @@
 			<field name="grossAmount" />
 		</panel>
 		<panel sidebar="true">
-			<button name="btnValidate" title="Validate" onClick="action-invoice-method-buttonValidate-on-click,action-invoice-method-on-save-generate-reference,save" showIf="status == 'draft'"/>
+			<button name="btnValidate" title="Validate" onClick="action-invoice-method-generate-reference,action-invoice-method-buttonValidate-on-click,save" showIf="status == 'draft'"/>
 			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-buttonCancel-on-click,save" hideIf="status=='cancelled'"/>
 			<button name="btnPaid" title="Paid" onClick="action-invoice-method-buttonPaid-on-click,save" showIf="status == 'validated'"/>
 		</panel>
@@ -114,7 +114,7 @@
 		<call class="com.axelor.gst.web.InvoiceController" method="calculateInvoice" />
 	</action-method>
 
-	<action-method name="action-invoice-method-on-save-generate-reference">
+	<action-method name="action-invoice-method-generate-reference">
 		<call class="com.axelor.gst.web.SequenceController" method="generateReference" />
 	</action-method>
 
@@ -124,7 +124,7 @@
 	</action-group>
 
 	<action-method name="action-invoice-method-fetch-report-data">
-		<call class="com.axelor.gst.web.InvoiceController" method="fetchReportData" />
+		<call class="com.axelor.gst.web.ProductController" method="fetchReportData" />
 	</action-method>
 
 	<action-report output="invoice-report" name="action-invoice-method-generate-report" design="Invoice.rptdesign" format="pdf">
