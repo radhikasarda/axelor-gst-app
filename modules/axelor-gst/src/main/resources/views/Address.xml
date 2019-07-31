@@ -21,7 +21,7 @@
 		<panel title="Address" css="panel-green">
 		<field name="type"  selection="address.type.selection"/>
 		<field name="country" />
-		<field name="state"/>
+		<field name="state" />
 		<field name="city" />	
 		<field name="line1" />
 		<field name="line2" />

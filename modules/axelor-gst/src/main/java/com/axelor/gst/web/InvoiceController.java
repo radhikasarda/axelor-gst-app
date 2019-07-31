@@ -41,21 +41,36 @@ public class InvoiceController {
 	public void calculateInvoice(ActionRequest request, ActionResponse response) {
 
 		Invoice invoice = request.getContext().asType(Invoice.class);
+		Address invoiceAddress = null;
+		Address companyAddress = null;
+		if (invoice.getInvoiceAddress() != null) {
+			invoiceAddress = invoice.getInvoiceAddress();
+		} else {
+			invoiceAddress = null;
+		}
+		if (invoice.getCompany() != null) {
+			if (invoice.getCompany().getAddress() != null) {
+				companyAddress = invoice.getCompany().getAddress();
+			}
+		} else {
+			companyAddress = null;
+		}
 		if (invoice.getInvoiceItemsList() == null) {
 			return;
 		} else {
 			List<InvoiceLine> invoiceLineList = invoice.getInvoiceItemsList();
 			List<InvoiceLine> invoiceLineItems = new ArrayList<InvoiceLine>();
+
 			for (InvoiceLine invoiceLineItem : invoiceLineList) {
-				
-				InvoiceLine invoiceline = invoiceLineService.calculateInvoiceLine(invoiceLineItem,
-						invoice.getInvoiceAddress(), invoice.getCompany().getAddress());
-				invoiceLineItems.add(invoiceline);}
-			
-			invoice.setInvoiceItemsList(invoiceLineItems);
-			invoice = service.calculateInvoice(invoice);
-			response.setValues(invoice);
+				InvoiceLine invoiceline = invoiceLineService.calculateInvoiceLine(invoiceLineItem, invoiceAddress,
+						companyAddress);
+				invoiceLineItems.add(invoiceline);
+				invoice.setInvoiceItemsList(invoiceLineItems);
+				invoice = service.calculateInvoice(invoice);
+				response.setValues(invoice);
+			}
 		}
+
 	}
 
 	public void fetchInvoiceData(ActionRequest request, ActionResponse response) {
@@ -67,36 +82,35 @@ public class InvoiceController {
 		response.setValue("shippingAddress", invoice.getShippingAddress());
 	}
 
-
-
 	public void createInvoice(ActionRequest request, ActionResponse response) {
 		Context context = request.getContext();
 		List<String> list = (List<String>) context.get("_ids");
-		if(list!=null) {
-
-		List<InvoiceLine> invoiceLineList = new ArrayList<>();
 		if (list != null) {
 
-			for (int i = 0; i < list.size(); i++) {
-				Product product = Beans.get(ProductRepository.class).all().filter("self.id = ?", list.get(i))
-						.fetchOne();
-				InvoiceLine invoiceLine = new InvoiceLine();
-				invoiceLine.setProduct(product);
-				invoiceLine.setItem(product.getName());
-				invoiceLine.setHSBN(product.getHSBN());
-				invoiceLine.setQty(1);
-				invoiceLine.setPrice(product.getSalePrice());
-				invoiceLine.setGstRate(product.getGstRate());
-				invoiceLineList.add(invoiceLine);
-			}
+			List<InvoiceLine> invoiceLineList = new ArrayList<>();
+			if (list != null) {
 
-			ActionViewBuilder actionViewBuilder = ActionView.define(String.format("Create Invoice"))
-					.model(Invoice.class.getName()).add("form", "invoice-form").add("grid", "invoice-grid")
-					.context("invoiceLineList", invoiceLineList);
-			response.setView(actionViewBuilder.map());
+				for (int i = 0; i < list.size(); i++) {
+					Product product = Beans.get(ProductRepository.class).all().filter("self.id = ?", list.get(i))
+							.fetchOne();
+					InvoiceLine invoiceLine = new InvoiceLine();
+					invoiceLine.setProduct(product);
+					invoiceLine.setItem(product.getName());
+					invoiceLine.setHSBN(product.getHSBN());
+					invoiceLine.setQty(1);
+					invoiceLine.setPrice(product.getSalePrice());
+					invoiceLine.setGstRate(product.getGstRate());
+					invoiceLineList.add(invoiceLine);
+				}
+
+				ActionViewBuilder actionViewBuilder = ActionView.define(String.format("Create Invoice"))
+						.model(Invoice.class.getName()).add("form", "invoice-form").add("grid", "invoice-grid")
+						.context("invoiceLineList", invoiceLineList);
+				response.setView(actionViewBuilder.map());
+			}
+		} else {
+			response.setError("Please Select a Product!!");
 		}
-		}
-		else {response.setError("Please Select a Product!!");}
 
 	}
 

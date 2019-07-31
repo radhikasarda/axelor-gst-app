@@ -32,7 +32,8 @@
 		</panel>
 	</form>
 	<action-record name="action-invoiceline-method-product-onchange" model="com.axelor.axelor.gst.db.InvoiceLine">
-		<field name="item" expr="eval:'['+product?.code+']'+product?.name"  />
+		<field name="item" expr="eval:'['+product.code+']'+product.name" if="product" />
+		<field name="item" expr="eval:' '" if="!product" />	
 		<field name="gstRate" expr="eval: product?.gstRate"  />
 		<field name="HSBN" expr="eval: product?.HSBN"  />
 		<field name="price" expr="eval: product?.salePrice"/>

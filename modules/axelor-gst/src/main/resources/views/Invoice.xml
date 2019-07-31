@@ -33,7 +33,7 @@
 
 			</panel>
 
-			<field name="company" />
+			<field name="company"  onChange="action-invoice-method-onChange-party"/>
 			<field name="reference" />
 			<field name="invoiceDate" />
 			<field name="priority" />
@@ -53,7 +53,7 @@
 			<field name="grossAmount" />
 		</panel>
 		<panel sidebar="true">
-			<button name="btnValidate" title="Validate" onClick="action-invoice-method-generate-reference,action-invoice-method-buttonValidate-on-click,save" showIf="status == 'draft'"/>
+			<button name="btnValidate" title="Validate" onClick="action-invoice-method-validate-fields,action-invoice-method-generate-reference,action-invoice-method-buttonValidate-on-click,save" showIf="status == 'draft'"/>
 			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-buttonCancel-on-click,save" hideIf="status=='cancelled'"/>
 			<button name="btnPaid" title="Paid" onClick="action-invoice-method-buttonPaid-on-click,save" showIf="status == 'validated'"/>
 		</panel>
@@ -143,5 +143,9 @@
 	<action-validate name="action-invoice-method-on-move-kanban" >
 	<error message="This action is not Permitted!!" if="status=='draft'"/>
 	</action-validate>
-
+	<action-validate name="action-invoice-method-validate-fields" >
+	<error message="Some fields are missing" if="!party"/>
+	<error message="Some fields are missing" if="!invoiceAddress"/>
+	</action-validate>
+	
 </object-views>

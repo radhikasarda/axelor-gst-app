@@ -12,7 +12,6 @@ import com.axelor.axelor.gst.db.Sequence;
 
 public class InvoiceServiceImpl implements InvoiceService {
 
-
 	@Override
 	public Invoice calculateInvoice(Invoice invoice) {
 		BigDecimal invoiceNetAmount = BigDecimal.ZERO;
@@ -21,60 +20,71 @@ public class InvoiceServiceImpl implements InvoiceService {
 		BigDecimal invoicecgst = BigDecimal.ZERO;
 		BigDecimal invoicegrossAmount = BigDecimal.ZERO;
 
-		
-		for (InvoiceLine invoiceItemsList : invoice.getInvoiceItemsList()) {
-			
+		if (invoice.getCompany() == null || invoice.getParty() == null || invoice.getCompany().getAddress() == null
+				|| invoice.getCompany().getAddress().getState() == null || invoice.getInvoiceAddress() == null
+				|| invoice.getInvoiceAddress().getState() == null) {
 
-			invoiceNetAmount = invoiceNetAmount.add(invoiceItemsList.getNetAmount());
-			invoiceigst = invoiceigst.add(invoiceItemsList.getIGST());
-			invoicecgst = invoicecgst.add(invoiceItemsList.getCGST());
-			invoicesgst = invoicesgst.add(invoiceItemsList.getSGST());
-			invoicegrossAmount = invoicegrossAmount.add(invoiceItemsList.getGrossAmount());
+			invoice.setNetIGST(BigDecimal.ZERO);
+			invoice.setNetSGST(BigDecimal.ZERO);
+			invoice.setNetCGST(BigDecimal.ZERO);
+		} else {
+			for (InvoiceLine invoiceItemsList : invoice.getInvoiceItemsList()) {
 
+				invoiceNetAmount = invoiceNetAmount.add(invoiceItemsList.getNetAmount());
+				invoiceigst = invoiceigst.add(invoiceItemsList.getIGST());
+				invoicecgst = invoicecgst.add(invoiceItemsList.getCGST());
+				invoicesgst = invoicesgst.add(invoiceItemsList.getSGST());
+				invoicegrossAmount = invoicegrossAmount.add(invoiceItemsList.getGrossAmount());
+			}
+			invoice.setNetIGST(invoiceigst);
+			invoice.setNetSGST(invoicesgst);
+			invoice.setNetCGST(invoicecgst);
+			invoice.setNetAmount(invoiceNetAmount);
+			invoice.setGrossAmount(invoicegrossAmount);
 		}
-		invoice.setNetIGST(invoiceigst);
-		invoice.setNetSGST(invoicesgst);
-		invoice.setNetCGST(invoicecgst);
-		invoice.setNetAmount(invoiceNetAmount);
-		invoice.setGrossAmount(invoicegrossAmount);
 		return invoice;
 
 	}
 
 	@Override
 	public Invoice fetchInvoiceData(Invoice invoice) {
-		
-		if(invoice.getParty()==null) {
+
+		if (invoice.getParty() != null) {
+			if (!invoice.getParty().getContactList().isEmpty()) {
+				for (Contact partyContactList : invoice.getParty().getContactList()) {
+					if (partyContactList.getType().equals("primary")) {
+						invoice.setPartyContact(partyContactList);
+					}
+				}
+			} else {
+				invoice.setPartyContact(null);
+			}
+			if (!invoice.getParty().getAddressList().isEmpty()) {
+				for (Address address : invoice.getParty().getAddressList()) {
+
+					if (address.getType().equals("default")) {
+						invoice.setInvoiceAddress(address);
+						invoice.setShippingAddress(address);
+					} else if (address.getType().equals("invoice")) {
+						invoice.setInvoiceAddress(address);
+						if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
+							invoice.setShippingAddress(invoice.getInvoiceAddress());
+						}
+					} else if (address.getType().equals("shipping")) {
+						if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
+							invoice.setShippingAddress(invoice.getInvoiceAddress());
+						} else
+							invoice.setShippingAddress(address);
+					}
+				}
+			} else {
+				invoice.setInvoiceAddress(null);
+				invoice.setShippingAddress(null);
+			}
+		} else {
+			invoice.setPartyContact(null);
 			invoice.setInvoiceAddress(null);
 			invoice.setShippingAddress(null);
-			invoice.setPartyContact(null);
-		}
-		else {
-		for (Contact partyContactList : invoice.getParty().getContactList()) {
-			if (partyContactList.getType().equals("primary")) {
-				invoice.setPartyContact(partyContactList);
-			}
-		}
-
-		for (Address address : invoice.getParty().getAddressList()) {
-
-			if (address.getType().equals("default")) {
-				invoice.setInvoiceAddress(address);
-				invoice.setShippingAddress(address);
-			} else if (address.getType().equals("invoice")) {
-				invoice.setInvoiceAddress(address);
-
-				if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
-					invoice.setShippingAddress(invoice.getInvoiceAddress());
-				}
-			} else if (address.getType().equals("shipping")) {
-				if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
-					invoice.setShippingAddress(invoice.getInvoiceAddress());
-				} else
-					invoice.setShippingAddress(address);
-
-			}
-		}
 		}
 
 		return invoice;
