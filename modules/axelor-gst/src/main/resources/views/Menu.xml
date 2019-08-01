@@ -130,7 +130,6 @@
 		<view type="grid" name="invoice-grid" />
 		<view type="form" name="invoice-form" />
 		<domain>self.status='paid'</domain>
-
 	</action-view>
 
 	<menuitem name="invoice-root-cancelled-invoice" parent="invoice-root" title="Cancelled Invoice"

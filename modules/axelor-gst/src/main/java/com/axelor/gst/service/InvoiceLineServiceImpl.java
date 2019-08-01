@@ -1,11 +1,8 @@
 package com.axelor.gst.service;
 
 import java.math.BigDecimal;
-
 import com.axelor.axelor.gst.db.Address;
-import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
-import com.axelor.axelor.gst.db.State;
 
 public class InvoiceLineServiceImpl implements InvoiceLineService {
 
@@ -15,10 +12,6 @@ public class InvoiceLineServiceImpl implements InvoiceLineService {
 		BigDecimal netAmount = BigDecimal.ZERO;
 		BigDecimal igst = BigDecimal.ZERO;
 		BigDecimal sgst = BigDecimal.ZERO;
-		BigDecimal cgst = BigDecimal.ZERO;
-		BigDecimal grossAmount = BigDecimal.ZERO;
-		String companyState = null;
-		System.out.println("On change Party:::::::::::::::");
 		netAmount = invoiceLine.getPrice().multiply(new BigDecimal(invoiceLine.getQty()));
 		if (invoiceAddress == null || companyAddress == null || invoiceAddress.getState() == null
 				|| companyAddress.getState() == null || companyAddress.getState().getName() == null) {
@@ -29,7 +22,6 @@ public class InvoiceLineServiceImpl implements InvoiceLineService {
 			invoiceLine.setGrossAmount(netAmount);
 			return invoiceLine;
 		} else {
-
 			if (!invoiceAddress.getState().getName().equals(companyAddress.getState().getName())) {
 				igst = netAmount.multiply(invoiceLine.getGstRate());
 				invoiceLine.setIGST(igst);
@@ -47,6 +39,5 @@ public class InvoiceLineServiceImpl implements InvoiceLineService {
 			return invoiceLine;
 		}
 	}
-
 
 }

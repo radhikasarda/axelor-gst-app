@@ -12,7 +12,6 @@ import com.axelor.meta.db.MetaModel;
 import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
-import com.google.inject.persist.Transactional;
 
 public class SequenceController {
 
@@ -25,10 +24,10 @@ public class SequenceController {
 
 		Sequence sequence = request.getContext().asType(Sequence.class);
 		sequence = sequenceService.generateNextNumber(sequence);
-		response.setValue("nextNumber", sequence.getNextNumber());
+		response.setValues(sequence);
 	}
 
-	@Transactional
+	
 	public void generateReference(ActionRequest request, ActionResponse response) {
 
 		String models = (String) request.getContext().get("_model");
@@ -39,33 +38,27 @@ public class SequenceController {
 				Sequence sequence = sequenceRepository.all().filter("self.model = " + model.getId()).fetchOne();
 				if (sequence == null) {
 					response.setError("No sequence specified");
-				} 
-				else {
-					String refNumber = sequence.getNextNumber();
-					invoice.setReference(refNumber);
-					sequence = sequenceService.getReferenceNumber(sequence);
-					sequenceRepository.save(sequence);
-					response.setValue("reference", invoice.getReference());
-					}
+				} else {
+					invoice.setReference(sequence.getNextNumber());
+					sequenceService.getReferenceNumber(sequence);
+					response.setValues(invoice);
+				}
 			}
-		}else if(models.equals("com.axelor.axelor.gst.db.Party")){
-			
+		} else if (models.equals("com.axelor.axelor.gst.db.Party")) {
+
 			Party party = request.getContext().asType(Party.class);
 			if (party.getReference() == null) {
 				MetaModel model = Beans.get(MetaModelRepository.class).findByName("Party");
 				Sequence sequence = sequenceRepository.all().filter("self.model = " + model.getId()).fetchOne();
 				if (sequence == null) {
 					response.setError("No sequence specified");
-				} 
-				else {
-					String refNumber = sequence.getNextNumber();
-					party.setReference(refNumber);
-					sequence = sequenceService.getReferenceNumber(sequence);
-					sequenceRepository.save(sequence);
-					response.setValue("reference", party.getReference());
+				} else {
+					party.setReference(sequence.getNextNumber());
+					sequenceService.getReferenceNumber(sequence);
+					response.setValues(party);
 				}
-			
+
+			}
 		}
 	}
-}
 }

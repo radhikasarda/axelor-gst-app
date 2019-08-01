@@ -12,11 +12,12 @@
 
 	</grid>
 	<form name="city-form" title="City"
-		model="com.axelor.axelor.gst.db.City">
+		model="com.axelor.axelor.gst.db.City" >
 		<panel title="City" css="panel-green">
 			<field name="name" />
 			<field name="state" />
 			<field name="country" />
-		</panel>
+		</panel>		
 	</form>
+	
 </object-views>

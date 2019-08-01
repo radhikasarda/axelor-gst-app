@@ -22,8 +22,6 @@
 			<field name="secondaryEmail" />
 			<field name="primaryPhone" />
 			<field name="secondaryPhone" />
-			<field name="company" />
-			<field name="party" />
 		</panel>
 	</form>
 	<selection name="contact.type.selection">

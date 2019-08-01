@@ -1,31 +1,24 @@
 package com.axelor.gst.web;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import com.axelor.app.AppSettings;
 import com.axelor.axelor.gst.db.Address;
 import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
-import com.axelor.axelor.gst.db.Party;
 import com.axelor.axelor.gst.db.Product;
-import com.axelor.axelor.gst.db.Sequence;
 import com.axelor.axelor.gst.db.repo.ProductRepository;
 import com.axelor.axelor.gst.db.repo.SequenceRepository;
 import com.axelor.gst.service.InvoiceLineService;
 import com.axelor.gst.service.InvoiceService;
 import com.axelor.inject.Beans;
-import com.axelor.meta.db.MetaModel;
-import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.meta.schema.actions.ActionView.ActionViewBuilder;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
-import com.google.inject.persist.Transactional;
 
 public class InvoiceController {
 
@@ -66,17 +59,22 @@ public class InvoiceController {
 						companyAddress);
 				invoiceLineItems.add(invoiceline);
 				invoice.setInvoiceItemsList(invoiceLineItems);
-				invoice = service.calculateInvoice(invoice);
-				response.setValues(invoice);
+				response.setValue("invoiceItemsList", invoice.getInvoiceItemsList());
 			}
+			invoice = service.calculateInvoice(invoice);
+			response.setValue("netCGST", invoice.getNetCGST());
+			response.setValue("netIGST", invoice.getNetIGST());
+			response.setValue("netSGST", invoice.getNetSGST());
+			response.setValue("grossAmount", invoice.getGrossAmount());
+			response.setValue("netAmount", invoice.getNetAmount());
+
 		}
 
 	}
 
-	public void fetchInvoiceData(ActionRequest request, ActionResponse response) {
-
+	public void setInvoiceData(ActionRequest request, ActionResponse response) {
 		Invoice invoice = request.getContext().asType(Invoice.class);
-		invoice = service.fetchInvoiceData(invoice);
+		invoice = service.setInvoiceData(invoice);
 		response.setValue("partyContact", invoice.getPartyContact());
 		response.setValue("invoiceAddress", invoice.getInvoiceAddress());
 		response.setValue("shippingAddress", invoice.getShippingAddress());

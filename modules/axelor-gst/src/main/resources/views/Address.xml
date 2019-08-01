@@ -25,7 +25,7 @@
 		<field name="city" />	
 		<field name="line1" />
 		<field name="line2" />
-		<field name="pincode" />
+		<field name="pincode" pattern="^[1-9][0-9]{5}$"/>
 	
 		</panel>
 	</form>
@@ -35,4 +35,5 @@
 		<option value="shipping">Shipping</option>
 		<option value="others">Others</option>
 	</selection>
+
 </object-views>

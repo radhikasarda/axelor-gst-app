@@ -15,7 +15,7 @@
 
 	</grid>
 	<form name="bank-account-form" title="Bank Account"
-		model="com.axelor.axelor.gst.db.BankAccount" onNew="action-bank-account-defaults">
+		model="com.axelor.axelor.gst.db.BankAccount" onNew="action-bank-account-defaults" >
 		<panel title="Bank Account" css="panel-blue">
 			<field name="bank" />
 			<field name="accountNo" />
@@ -33,4 +33,5 @@
 	<action-record name="action-bank-account-defaults" model="com.axelor.axelor.gst.db.BankAccount">
 	<field name="type" expr="current"/>
 	</action-record>
+
 </object-views>

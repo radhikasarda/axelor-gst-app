@@ -22,10 +22,10 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large"
-		onNew="action-invoice-method-set-defaults,action-invoice-method-getInvoiceLineDetails">
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" 
+		onNew="action-invoice-method-set-defaults,action-invoice-method-getInvoiceLineDetails" >
 		<toolbar>
-			<button name="btnPrint" title="Print" onClick="action-invoice-method-print" icon="fa-print" />
+			<button name="btnPrint" title="Print" onClick="action-invoice-method-generate-report" icon="fa-print" />
 		</toolbar>
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
@@ -37,7 +37,7 @@
 			<field name="reference" />
 			<field name="invoiceDate" />
 			<field name="priority" />
-			<field name="party" onChange="action-invoice-method-onChange-party" />
+			<field name="party" domain="self.customer = true" onChange="action-invoice-method-onChange-party" />
 			<field name="partyContact" domain="self.party = :party"/>
 			<field name="invoiceAddress" domain="self.party = :party"/>
 			<field name="shippingAddress" domain="self.party = :party"/>
@@ -52,7 +52,7 @@
 			<field name="netSGST" />
 			<field name="grossAmount" />
 		</panel>
-		<panel sidebar="true">
+		<panel sidebar="true" hideIf="status=='cancelled'">
 			<button name="btnValidate" title="Validate" onClick="action-invoice-method-validate-fields,action-invoice-method-generate-reference,action-invoice-method-buttonValidate-on-click,save" showIf="status == 'draft'"/>
 			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-buttonCancel-on-click,save" hideIf="status=='cancelled'"/>
 			<button name="btnPaid" title="Paid" onClick="action-invoice-method-buttonPaid-on-click,save" showIf="status == 'validated'"/>
@@ -83,7 +83,7 @@
 	<action-record name="action-invoice-method-set-defaults" model="com.axelor.axelor.gst.db.Invoice">
 		<field name="company" expr="eval:__repo__(Company).all().fetchOne()" />
 		<field name="invoiceDate" expr="eval: __datetime__ " />
-		<field name="useInvoiceAddress" expr="true" />
+		<field name="useInvoiceAddress"  expr="true" />
 	</action-record>
 
 	<action-method name="action-invoice-net-calculation">
@@ -108,7 +108,7 @@
 	</action-group>
 
 	<action-method name="action-method-invoice-onChange-party-calculateInvoiceData">
-		<call class="com.axelor.gst.web.InvoiceController" method="fetchInvoiceData" />
+		<call class="com.axelor.gst.web.InvoiceController" method="setInvoiceData" />
 	</action-method>
 	<action-method name="action-method-invoice-onChange-party-calculate">
 		<call class="com.axelor.gst.web.InvoiceController" method="calculateInvoice" />
@@ -118,18 +118,9 @@
 		<call class="com.axelor.gst.web.SequenceController" method="generateReference" />
 	</action-method>
 
-	<action-group name="action-invoice-method-print">
-		<action name="action-invoice-method-fetch-report-data" />
-		<action name="action-invoice-method-generate-report" />
-	</action-group>
-
-	<action-method name="action-invoice-method-fetch-report-data">
-		<call class="com.axelor.gst.web.ProductController" method="fetchReportData" />
-	</action-method>
-
 	<action-report output="invoice-report" name="action-invoice-method-generate-report" design="Invoice.rptdesign" format="pdf">
-		<param name="listId" expr="eval: listId" />
-		<param name="filePath" expr="eval: filePath " />
+		<param name="listId" expr="eval: id" />
+		<param name="filePath" expr="eval: com.axelor.app.AppSettings.get().get('file.upload.dir')"/>
 	</action-report>
 
 	<action-group name="action-invoice-method-getInvoiceLineDetails">
@@ -143,6 +134,7 @@
 	<action-validate name="action-invoice-method-on-move-kanban" >
 	<error message="This action is not Permitted!!" if="status=='draft'"/>
 	</action-validate>
+	
 	<action-validate name="action-invoice-method-validate-fields" >
 	<error message="Some fields are missing" if="!party"/>
 	<error message="Some fields are missing" if="!invoiceAddress"/>

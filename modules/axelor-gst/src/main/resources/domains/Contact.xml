@@ -14,10 +14,12 @@
 		<string name="secondaryEmail" title="Secondary Email" />
 		<string name="primaryPhone" title="Primary Phone" />
 		<string name="secondaryPhone" title="Secondary Phone" />
+					
+<!-- 			for bi-directional -->
 		<many-to-one name="company" title="Company"
 			ref="com.axelor.axelor.gst.db.Company" />
 		<many-to-one name="party" title="Party"
-			ref="com.axelor.axelor.gst.db.Party" />
+			ref="com.axelor.axelor.gst.db.Party" /> 
 	</entity>
 </domain-models>
   

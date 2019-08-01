@@ -5,8 +5,8 @@
 
 	<grid name="product-grid" title="Product" model="com.axelor.axelor.gst.db.Product">
 		<toolbar>
-			<button name="reportBtn" title="Print" onClick="action-product-method-print-report" icon="fa-print" />
-			<button name="createInvoiceBtn" title="Create Invoice" onClick="action-product-method-create-invoice"/>
+			<button name="reportBtn" title="Print" onClick="action-product-method-generate-report" icon="fa-print" />
+			<button name="createInvoiceBtn" title="Create Invoice" onClick="action-product-method-create-invoice" />
 		</toolbar>
 		<field name="name" />
 		<field name="code" />
@@ -60,26 +60,15 @@
     ]]></template>
 	</cards>
 
-		<action-attrs name="action-product-method-onchange-category">
- <attribute for="gstRate" name="value" expr="eval: category?.gstRate" /> 
+	<action-attrs name="action-product-method-onchange-category">
+		<attribute for="gstRate" name="value" expr="eval: category?.gstRate" />
 
-		</action-attrs>
-
-	<action-group name="action-product-method-print-report">
-		<action name="action-product-method-fetch-report-data" />
-		<action name="action-product-method-generate-report" />
-	</action-group>
-
-	<action-method name="action-product-method-fetch-report-data">
-		<call class="com.axelor.gst.web.ProductController" method="fetchReportData" />
-	</action-method>
-
+	</action-attrs>
 	<action-report output="product-report" name="action-product-method-generate-report" design="Product.rptdesign" format="pdf">
-		<param name="listId" expr="eval: listId" />
-		<param name="filePath" expr="eval: filePath " />
+		<param name="listId" expr="eval: _ids.join(',')" />
+		<param name="filePath" expr="eval: com.axelor.app.AppSettings.get().get('file.upload.dir')" />
 	</action-report>
 
-	
 	<action-method name="action-product-method-create-invoice">
 		<call class="com.axelor.gst.web.InvoiceController" method="createInvoice" />
 	</action-method>

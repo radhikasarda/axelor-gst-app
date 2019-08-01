@@ -1,14 +1,12 @@
 package com.axelor.gst.service;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import com.axelor.axelor.gst.db.Address;
 import com.axelor.axelor.gst.db.Contact;
 import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
-import com.axelor.axelor.gst.db.Party;
-import com.axelor.axelor.gst.db.Sequence;
+import com.axelor.axelor.gst.db.repo.AddressRepository;
 
 public class InvoiceServiceImpl implements InvoiceService {
 
@@ -20,34 +18,35 @@ public class InvoiceServiceImpl implements InvoiceService {
 		BigDecimal invoicecgst = BigDecimal.ZERO;
 		BigDecimal invoicegrossAmount = BigDecimal.ZERO;
 
-		if (invoice.getCompany() == null || invoice.getParty() == null || invoice.getCompany().getAddress() == null
-				|| invoice.getCompany().getAddress().getState() == null || invoice.getInvoiceAddress() == null
-				|| invoice.getInvoiceAddress().getState() == null) {
+		for (InvoiceLine invoiceItemsList : invoice.getInvoiceItemsList()) {
 
-			invoice.setNetIGST(BigDecimal.ZERO);
-			invoice.setNetSGST(BigDecimal.ZERO);
-			invoice.setNetCGST(BigDecimal.ZERO);
-		} else {
-			for (InvoiceLine invoiceItemsList : invoice.getInvoiceItemsList()) {
+			invoiceNetAmount = invoiceNetAmount.add(invoiceItemsList.getNetAmount());
+			invoicegrossAmount = invoicegrossAmount.add(invoiceItemsList.getGrossAmount());
+			if (invoice.getCompany() == null || invoice.getParty() == null || invoice.getCompany().getAddress() == null
+					|| invoice.getCompany().getAddress().getState() == null || invoice.getInvoiceAddress() == null
+					|| invoice.getInvoiceAddress().getState() == null) {
 
-				invoiceNetAmount = invoiceNetAmount.add(invoiceItemsList.getNetAmount());
+				invoice.setNetIGST(BigDecimal.ZERO);
+				invoice.setNetSGST(BigDecimal.ZERO);
+				invoice.setNetCGST(BigDecimal.ZERO);
+
+			} else {
 				invoiceigst = invoiceigst.add(invoiceItemsList.getIGST());
 				invoicecgst = invoicecgst.add(invoiceItemsList.getCGST());
 				invoicesgst = invoicesgst.add(invoiceItemsList.getSGST());
-				invoicegrossAmount = invoicegrossAmount.add(invoiceItemsList.getGrossAmount());
 			}
-			invoice.setNetIGST(invoiceigst);
-			invoice.setNetSGST(invoicesgst);
-			invoice.setNetCGST(invoicecgst);
-			invoice.setNetAmount(invoiceNetAmount);
-			invoice.setGrossAmount(invoicegrossAmount);
-		}
-		return invoice;
 
+		}
+		invoice.setNetIGST(invoiceigst);
+		invoice.setNetSGST(invoicesgst);
+		invoice.setNetCGST(invoicecgst);
+		invoice.setNetAmount(invoiceNetAmount);
+		invoice.setGrossAmount(invoicegrossAmount);
+		return invoice;
 	}
 
 	@Override
-	public Invoice fetchInvoiceData(Invoice invoice) {
+	public Invoice setInvoiceData(Invoice invoice) {
 
 		if (invoice.getParty() != null) {
 			if (!invoice.getParty().getContactList().isEmpty()) {
@@ -62,15 +61,15 @@ public class InvoiceServiceImpl implements InvoiceService {
 			if (!invoice.getParty().getAddressList().isEmpty()) {
 				for (Address address : invoice.getParty().getAddressList()) {
 
-					if (address.getType().equals("default")) {
+					if (address.getType().equals(AddressRepository.DEFAULT)) {
 						invoice.setInvoiceAddress(address);
 						invoice.setShippingAddress(address);
-					} else if (address.getType().equals("invoice")) {
+					} else if (address.getType().equals(AddressRepository.INVOICE)) {
 						invoice.setInvoiceAddress(address);
 						if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
 							invoice.setShippingAddress(invoice.getInvoiceAddress());
 						}
-					} else if (address.getType().equals("shipping")) {
+					} else if (address.getType().equals(AddressRepository.SHIPPING)) {
 						if (invoice.getUseInvoiceAddress() == Boolean.TRUE) {
 							invoice.setShippingAddress(invoice.getInvoiceAddress());
 						} else
