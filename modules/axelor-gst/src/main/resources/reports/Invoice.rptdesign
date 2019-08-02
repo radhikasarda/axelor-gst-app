@@ -1416,49 +1416,50 @@ Address:<VALUE-OF>row["full_address"]</VALUE-OF>]]></text-property>
                     <property name="height">0.4154929577464789in</property>
                     <cell id="61">
                         <data id="62">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">left</property>
                             <property name="resultSetColumn">item</property>
                         </data>
                     </cell>
                     <cell id="63">
                         <data id="64">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">qty</property>
                         </data>
                     </cell>
                     <cell id="65">
                         <data id="66">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">price</property>
                         </data>
                     </cell>
                     <cell id="67">
                         <data id="68">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">net_amount</property>
                         </data>
                     </cell>
                     <cell id="69">
                         <property name="textAlign">center</property>
                         <data id="70">
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">igst</property>
                         </data>
                     </cell>
                     <cell id="71">
                         <data id="72">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">cgst</property>
                         </data>
                     </cell>
                     <cell id="73">
                         <data id="74">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">sgst</property>
                         </data>
                     </cell>
                     <cell id="75">
                         <data id="76">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="resultSetColumn">gross_amount</property>
                         </data>
                     </cell>
@@ -1477,7 +1478,7 @@ Address:<VALUE-OF>row["full_address"]</VALUE-OF>]]></text-property>
                     </cell>
                     <cell id="79">
                         <text id="98">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["Qty Total"]</VALUE-OF>]]></text-property>
                         </text>
@@ -1485,35 +1486,35 @@ Address:<VALUE-OF>row["full_address"]</VALUE-OF>]]></text-property>
                     <cell id="80"/>
                     <cell id="81">
                         <text id="95">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["Total netAmount"]</VALUE-OF>]]></text-property>
                         </text>
                     </cell>
                     <cell id="82">
                         <text id="99">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["igstTotal"]</VALUE-OF>]]></text-property>
                         </text>
                     </cell>
                     <cell id="83">
                         <text id="100">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["cgstTotal"]</VALUE-OF>]]></text-property>
                         </text>
                     </cell>
                     <cell id="84">
                         <text id="101">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["sgstTotal"]</VALUE-OF>]]></text-property>
                         </text>
                     </cell>
                     <cell id="85">
                         <text id="102">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["grossAmountTotal"]</VALUE-OF>]]></text-property>
                         </text>

@@ -18,23 +18,22 @@ public class InvoiceServiceImpl implements InvoiceService {
 		BigDecimal invoicecgst = BigDecimal.ZERO;
 		BigDecimal invoicegrossAmount = BigDecimal.ZERO;
 
+		if (invoice.getCompany() == null || invoice.getParty() == null || invoice.getCompany().getAddress() == null
+				|| invoice.getCompany().getAddress().getState() == null || invoice.getInvoiceAddress() == null
+				|| invoice.getInvoiceAddress().getState() == null) {
+
+			invoice.setNetIGST(invoiceigst);
+			invoice.setNetSGST(invoicesgst);
+			invoice.setNetCGST(invoicecgst);
+
+		}
 		for (InvoiceLine invoiceItemsList : invoice.getInvoiceItemsList()) {
 
 			invoiceNetAmount = invoiceNetAmount.add(invoiceItemsList.getNetAmount());
 			invoicegrossAmount = invoicegrossAmount.add(invoiceItemsList.getGrossAmount());
-			if (invoice.getCompany() == null || invoice.getParty() == null || invoice.getCompany().getAddress() == null
-					|| invoice.getCompany().getAddress().getState() == null || invoice.getInvoiceAddress() == null
-					|| invoice.getInvoiceAddress().getState() == null) {
-
-				invoice.setNetIGST(BigDecimal.ZERO);
-				invoice.setNetSGST(BigDecimal.ZERO);
-				invoice.setNetCGST(BigDecimal.ZERO);
-
-			} else {
-				invoiceigst = invoiceigst.add(invoiceItemsList.getIGST());
-				invoicecgst = invoicecgst.add(invoiceItemsList.getCGST());
-				invoicesgst = invoicesgst.add(invoiceItemsList.getSGST());
-			}
+			invoiceigst = invoiceigst.add(invoiceItemsList.getIGST());
+			invoicecgst = invoicecgst.add(invoiceItemsList.getCGST());
+			invoicesgst = invoicesgst.add(invoiceItemsList.getSGST());
 
 		}
 		invoice.setNetIGST(invoiceigst);

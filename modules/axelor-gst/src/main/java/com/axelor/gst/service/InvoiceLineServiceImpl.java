@@ -9,31 +9,30 @@ public class InvoiceLineServiceImpl implements InvoiceLineService {
 	@Override
 	public InvoiceLine calculateInvoiceLine(InvoiceLine invoiceLine, Address invoiceAddress, Address companyAddress) {
 
-		BigDecimal netAmount = BigDecimal.ZERO;
-		BigDecimal igst = BigDecimal.ZERO;
-		BigDecimal sgst = BigDecimal.ZERO;
-		netAmount = invoiceLine.getPrice().multiply(new BigDecimal(invoiceLine.getQty()));
+		BigDecimal netAmount = invoiceLine.getPrice().multiply(new BigDecimal(invoiceLine.getQty()));
 		if (invoiceAddress == null || companyAddress == null || invoiceAddress.getState() == null
 				|| companyAddress.getState() == null || companyAddress.getState().getName() == null) {
-			invoiceLine.setIGST(BigDecimal.ZERO);
-			invoiceLine.setSGST(BigDecimal.ZERO);
-			invoiceLine.setCGST(BigDecimal.ZERO);
+			invoiceLine.setIGST(null);
+			invoiceLine.setSGST(null);
+			invoiceLine.setCGST(null);
 			invoiceLine.setNetAmount(netAmount);
 			invoiceLine.setGrossAmount(netAmount);
 			return invoiceLine;
-		} else {
+		} 
+		else {
 			if (!invoiceAddress.getState().getName().equals(companyAddress.getState().getName())) {
-				igst = netAmount.multiply(invoiceLine.getGstRate());
+				BigDecimal igst = (netAmount.multiply(invoiceLine.getGstRate())).divide(BigDecimal.valueOf(100));
 				invoiceLine.setIGST(igst);
 				invoiceLine.setGrossAmount(netAmount.add(igst));
-				invoiceLine.setSGST(BigDecimal.ZERO);
-				invoiceLine.setCGST(BigDecimal.ZERO);
+				invoiceLine.setSGST(null);
+				invoiceLine.setCGST(null);
 			} else {
-				sgst = netAmount.multiply(invoiceLine.getGstRate()).divide(new BigDecimal(200));
+				BigDecimal sgst = (netAmount.multiply(invoiceLine.getGstRate())).divide(BigDecimal.valueOf(200));
+				BigDecimal cgst = (netAmount.multiply(invoiceLine.getGstRate())).divide(BigDecimal.valueOf(200));
 				invoiceLine.setSGST(sgst);
-				invoiceLine.setCGST(sgst);
-				invoiceLine.setGrossAmount(netAmount.add(sgst).add(sgst));
-				invoiceLine.setIGST(BigDecimal.ZERO);
+				invoiceLine.setCGST(cgst);
+				invoiceLine.setGrossAmount(netAmount.add(sgst).add(cgst));
+				invoiceLine.setIGST(null);
 			}
 			invoiceLine.setNetAmount(netAmount);
 			return invoiceLine;

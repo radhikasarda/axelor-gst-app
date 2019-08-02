@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://axelor.com/xml/ns/object-views
   http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
 
-	<dashboard name="welcome.dashboard" title="Dashboard">
+	<dashboard name="welcome.dashboard" title="Dashboard" >
 		<dashlet action="chart:chart.unpaid.invoices.per.customer" colSpan="4" />
 		<dashlet action="chart:chart.paid.invoices.per.category.per.product" colSpan="4" />
 		<dashlet action="chart:chart.customer.per.state" colSpan="4" />

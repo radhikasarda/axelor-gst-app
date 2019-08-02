@@ -9,11 +9,15 @@ import com.axelor.axelor.gst.db.Address;
 import com.axelor.axelor.gst.db.Invoice;
 import com.axelor.axelor.gst.db.InvoiceLine;
 import com.axelor.axelor.gst.db.Product;
+import com.axelor.axelor.gst.db.Sequence;
 import com.axelor.axelor.gst.db.repo.ProductRepository;
 import com.axelor.axelor.gst.db.repo.SequenceRepository;
 import com.axelor.gst.service.InvoiceLineService;
 import com.axelor.gst.service.InvoiceService;
+import com.axelor.gst.service.SequenceService;
 import com.axelor.inject.Beans;
+import com.axelor.meta.db.MetaModel;
+import com.axelor.meta.db.repo.MetaModelRepository;
 import com.axelor.meta.schema.actions.ActionView;
 import com.axelor.meta.schema.actions.ActionView.ActionViewBuilder;
 import com.axelor.rpc.ActionRequest;
@@ -30,6 +34,8 @@ public class InvoiceController {
 	SequenceRepository sequenceRepository;
 	@Inject
 	ProductRepository productRepository;
+	@Inject
+	SequenceService sequenceService;
 
 	public void calculateInvoice(ActionRequest request, ActionResponse response) {
 
@@ -38,15 +44,11 @@ public class InvoiceController {
 		Address companyAddress = null;
 		if (invoice.getInvoiceAddress() != null) {
 			invoiceAddress = invoice.getInvoiceAddress();
-		} else {
-			invoiceAddress = null;
 		}
 		if (invoice.getCompany() != null) {
 			if (invoice.getCompany().getAddress() != null) {
 				companyAddress = invoice.getCompany().getAddress();
 			}
-		} else {
-			companyAddress = null;
 		}
 		if (invoice.getInvoiceItemsList() == null) {
 			return;
@@ -117,6 +119,22 @@ public class InvoiceController {
 		Context context = request.getContext();
 		response.setValue("invoiceItemsList", context.get("invoiceLineList"));
 
+	}
+
+	public void generateReferenceInvoice(ActionRequest request, ActionResponse response) {
+		Invoice invoice = request.getContext().asType(Invoice.class);
+		if (invoice.getReference() == null) {
+			MetaModel model = Beans.get(MetaModelRepository.class).findByName("Invoice");
+			Sequence sequence = sequenceRepository.all().filter("self.model = " + model.getId()).fetchOne();
+			if (sequence == null) {
+				response.setError("No sequence specified");
+			} else {
+				invoice.setReference(sequence.getNextNumber());
+				sequenceService.getReferenceNumber(sequence);
+				response.setValues(invoice);
+			}
+
+		}
 	}
 
 }

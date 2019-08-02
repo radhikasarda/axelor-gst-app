@@ -62,7 +62,6 @@
 
 	<action-attrs name="action-product-method-onchange-category">
 		<attribute for="gstRate" name="value" expr="eval: category?.gstRate" />
-
 	</action-attrs>
 	<action-report output="product-report" name="action-product-method-generate-report" design="Product.rptdesign" format="pdf">
 		<param name="listId" expr="eval: _ids.join(',')" />

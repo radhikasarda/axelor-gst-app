@@ -576,31 +576,20 @@ where company.id=1
                     </cell>
                     <cell id="80">
                         <text id="89">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["cost_price"]</VALUE-OF>]]></text-property>
                         </text>
                     </cell>
                     <cell id="85">
                         <text id="90">
-                            <property name="textAlign">center</property>
+                            <property name="textAlign">right</property>
                             <property name="contentType">html</property>
                             <text-property name="content"><![CDATA[<VALUE-OF>row["sale_price"]</VALUE-OF>]]></text-property>
                         </text>
                     </cell>
                 </row>
             </detail>
-            <footer>
-                <row id="59">
-                    <property name="height">0.2676056338028169in</property>
-                    <cell id="60"/>
-                    <cell id="61"/>
-                    <cell id="62"/>
-                    <cell id="75"/>
-                    <cell id="81"/>
-                    <cell id="86"/>
-                </row>
-            </footer>
         </table>
     </body>
 </report>

@@ -16,6 +16,7 @@
 		<view type="grid" name="party-grid" />
 		<view type="form" name="party-form" />
 		<view type="cards" name="party-card" />
+		
 	</action-view>
 
 	<menuitem name="party-root-configurations" parent="party-root" title="Configurations" />
@@ -48,6 +49,7 @@
 	<action-view name="party.root.configurations.view.party.city" title="City" model="com.axelor.axelor.gst.db.City">
 		<view type="grid" name="city-grid" />
 		<view type="form" name="city-form" />
+		
 	</action-view>
 
 	<menuitem name="company-root" title="Company" icon-background="blue" />
@@ -62,9 +64,10 @@
 
 	<menuitem name="company-root-bank-account" parent="company-root" title="Bank Account" action="company-root-bank-account.view.company-bank-account" />
 
-	<action-view name="company-root-bank-account.view.company-bank-account" title="Company" model="com.axelor.axelor.gst.db.BankAccount">
-		<view type="grid" name="bank-account-grid" />
+	<action-view name="company-root-bank-account.view.company-bank-account" title="Bank Account" model="com.axelor.axelor.gst.db.BankAccount">
 		<view type="form" name="bank-account-form" />
+		<view type="grid" name="bank-account-grid" />
+		
 	</action-view>
 	
 	<menuitem name="company-root-sequence" parent="company-root" title="Sequence" action="company-root-sequence.view.sequence" />
@@ -139,6 +142,5 @@
 		<view type="grid" name="invoice-grid" />
 		<view type="form" name="invoice-form" />
 		<domain>self.status='cancelled'</domain>
-
 	</action-view>
 </object-views>
