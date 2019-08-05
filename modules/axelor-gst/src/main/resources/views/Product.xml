@@ -5,7 +5,7 @@
 
 	<grid name="product-grid" title="Product" model="com.axelor.axelor.gst.db.Product">
 		<toolbar>
-			<button name="reportBtn" title="Print" onClick="action-product-method-generate-report" icon="fa-print" />
+			<button name="reportBtn" title="Print" onClick="action-validate-product-selection,action-product-method-generate-report" icon="fa-print" />
 			<button name="createInvoiceBtn" title="Create Invoice" onClick="action-product-method-create-invoice" />
 		</toolbar>
 		<field name="name" />
@@ -63,6 +63,10 @@
 	<action-attrs name="action-product-method-onchange-category">
 		<attribute for="gstRate" name="value" expr="eval: category?.gstRate" />
 	</action-attrs>
+	<action-validate name="action-validate-product-selection">
+		<error message="No Products selected" if="eval: _ids == null" />
+	</action-validate>
+
 	<action-report output="product-report" name="action-product-method-generate-report" design="Product.rptdesign" format="pdf">
 		<param name="listId" expr="eval: _ids.join(',')" />
 		<param name="filePath" expr="eval: com.axelor.app.AppSettings.get().get('file.upload.dir')" />

@@ -22,10 +22,10 @@
 		<field name="invoiceItemsList" />
 
 	</grid>
-	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large" 
-		onNew="action-invoice-method-set-defaults,action-invoice-method-get-invoiceline-details" >
+	<form name="invoice-form" title="Invoice" model="com.axelor.axelor.gst.db.Invoice" width="large"
+		onNew="action-invoice-method-set-defaults,action-invoice-method-get-invoiceline-details">
 		<toolbar>
-			<button name="btnPrint" title="Print" onClick="action-invoice-method-generate-report" icon="fa-print" />
+			<button name="btnPrint" title="Print" onClick="action-validate-invoicelineitems,action-invoice-method-generate-report" icon="fa-print" />
 		</toolbar>
 		<panel title="Invoice" css="panel-blue">
 			<panel colSpan="12">
@@ -33,14 +33,14 @@
 
 			</panel>
 
-			<field name="company"  onChange="action-invoice-method-onchange-party"/>
+			<field name="company" onChange="action-invoice-method-onchange-party" />
 			<field name="reference" />
 			<field name="invoiceDate" />
 			<field name="priority" />
 			<field name="party" domain="self.customer = true" onChange="action-invoice-method-onchange-party" />
-			<field name="partyContact" domain="self.party = :party"/>
-			<field name="invoiceAddress" domain="self.party = :party"/>
-			<field name="shippingAddress" domain="self.party = :party"/>
+			<field name="partyContact" domain="self.party = :party" />
+			<field name="invoiceAddress" domain="self.party = :party" />
+			<field name="shippingAddress" domain="self.party = :party" />
 			<field name="useInvoiceAddress" onChange="action-invoice-method-onchange-party" />
 		</panel>
 
@@ -53,9 +53,11 @@
 			<field name="grossAmount" />
 		</panel>
 		<panel sidebar="true" hideIf="status=='cancelled'">
-			<button name="btnValidate" title="Validate" onClick="action-invoice-method-validate-fields,action-invoice-method-generate-reference,action-invoice-method-validate-invoice,save" showIf="status == 'draft'"/>
-			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-cancel-invoice,save" hideIf="status=='cancelled'"/>
-			<button name="btnPaid" title="Paid" onClick="action-invoice-method-paid-invoice,save" showIf="status == 'validated'"/>
+			<button name="btnValidate" title="Validate"
+				onClick="action-invoice-method-validate-fields,action-invoice-method-generate-reference,action-invoice-method-validate-invoice,save"
+				showIf="status == 'draft'" />
+			<button name="btnCancel" title="Cancel" onClick="action-invoice-method-cancel-invoice,save" hideIf="status=='cancelled'" />
+			<button name="btnPaid" title="Paid" onClick="action-invoice-method-paid-invoice,save" showIf="status == 'validated'" />
 		</panel>
 	</form>
 
@@ -83,7 +85,7 @@
 	<action-record name="action-invoice-method-set-defaults" model="com.axelor.axelor.gst.db.Invoice">
 		<field name="company" expr="eval:__repo__(Company).all().fetchOne()" />
 		<field name="invoiceDate" expr="eval: __datetime__ " />
-		<field name="useInvoiceAddress"  expr="true" />
+		<field name="useInvoiceAddress" expr="true" />
 	</action-record>
 
 	<action-method name="action-invoice-net-calculation">
@@ -91,7 +93,7 @@
 	</action-method>
 
 	<action-attrs name="action-invoice-method-validate-invoice">
-		<attribute name="value" for="status" expr="validated"/>		
+		<attribute name="value" for="status" expr="validated" />
 	</action-attrs>
 
 	<action-attrs name="action-invoice-method-cancel-invoice">
@@ -115,12 +117,16 @@
 	</action-method>
 
 	<action-method name="action-invoice-method-generate-reference">
-		<call class="com.axelor.gst.web.InvoiceController" method="generateReferenceInvoice"/>
+		<call class="com.axelor.gst.web.InvoiceController" method="generateReferenceInvoice" />
 	</action-method>
+
+	<action-validate name="action-validate-invoicelineitems">
+		<error message="No invoiceline Items!!" if="eval: id==null" />
+	</action-validate>
 
 	<action-report output="invoice-report" name="action-invoice-method-generate-report" design="Invoice.rptdesign" format="pdf">
 		<param name="listId" expr="eval: id" />
-		<param name="filePath" expr="eval: com.axelor.app.AppSettings.get().get('file.upload.dir')"/>
+		<param name="filePath" expr="eval: com.axelor.app.AppSettings.get().get('file.upload.dir')" />
 	</action-report>
 
 	<action-group name="action-invoice-method-get-invoiceline-details">
@@ -131,13 +137,13 @@
 		<call class="com.axelor.gst.web.InvoiceController" method="fetchInvoiceLineData" />
 	</action-method>
 
-	<action-validate name="action-invoice-method-on-move-kanban" >
-	<error message="This action is not Permitted!!" if="status=='draft'"/>
+	<action-validate name="action-invoice-method-on-move-kanban">
+		<error message="This action is not Permitted!!" if="status=='draft'" />
 	</action-validate>
-	
-	<action-validate name="action-invoice-method-validate-fields" >
-	<error message="Some fields are missing" if="!party"/>
-	<error message="Some fields are missing" if="!invoiceAddress"/>
+
+	<action-validate name="action-invoice-method-validate-fields">
+		<error message="Some fields are missing" if="!party" />
+		<error message="Some fields are missing" if="!invoiceAddress" />
 	</action-validate>
-	
+
 </object-views>
